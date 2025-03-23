@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\INSN.ArchivoClinico.Presentation.props" />
+</Project>

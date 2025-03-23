@@ -1,0 +1,526 @@
+﻿@{
+    ViewData["Title"] = "Archivo Clínico";
+    var username = Context.Request.Cookies["NombreUsuario"];
+    var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    ViewBag.Cargando = ViewBag.Cargando ?? false;
+}
+
+@model INSN.ArchivoClinico.Domain.Entities.AtencionDto
+
+@* <link href="~/css/modal-auditoria.css" rel="stylesheet" /> *@
+<link href="~/css/menu.css" rel="stylesheet" />
+<link href="~/css/principal.css" rel="stylesheet" />
+
+<div id="main-content" class="col-md-12 col-sm-12">
+    <input type="hidden" id="idAtencionHidden" name="idAtencionHidden" value="@Model.atencion_id">
+
+    <div class="container-fluid">
+        <div class="row m-2">
+            <div class="col-md-12">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">badge</i> DATOS DEL PACIENTE
+                    </span>
+                    <div class="row m-2">
+                        <div class="col-sm-2 mb-2">
+                            <label for="CuentaAtencionId" class="col-form-label">Cuenta Atención</label>
+                            <input type="text" class="form-control" id="CuentaAtencionId" name="CuentaAtencionId" value="@Model.cuenta_atencion_id" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HistoriaClinica" class="col-form-label">Historia Clínica</label>
+                            <input type="text" class="form-control" id="HistoriaClinica" name="HistoriaClinica" value="@Model.historia_clinica" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TiposDocumento" class="col-form-label">Tipo Documento</label>
+                            <input type="text" class="form-control" id="TiposDocumento" name="TiposDocumento" value="@Model.tipos_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="NumeroDocumento" class="col-form-label">Número Documento</label>
+                            <input type="text" class="form-control" id="NumeroDocumento" name="NumeroDocumento" value="@Model.numero_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TipoSexo" class="col-form-label">Sexo</label>
+                            <input type="text" class="form-control" id="TipoSexo" name="TipoSexo" value="@Model.tipo_sexo" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento</label>
+                            <input type="text" class="form-control" id="FechaNacimiento" name="FechaNacimiento" value="@Model.fecha_nacimiento" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoPaterno" class="col-form-label">Apellido Paterno</label>
+                            <input type="text" class="form-control" id="ApellidoPaterno" name="ApellidoPaterno" value="@Model.apellido_paterno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoMaterno" class="col-form-label">Apellido Materno</label>
+                            <input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" value="@Model.apellido_materno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="Nombres" class="col-form-label">Nombres</label>
+                            <input type="text" class="form-control" id="Nombres" name="Nombres" value="@Model.nombres" readonly>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-6">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">login</i> DATOS DE LA ATENCIÓN
+                    </span>
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-4 mb-2">
+                            <label for="TipoServicio" class="col-form-label">Tipo Servicio</label>
+                            <input type="text" class="form-control" id="TipoServicio" name="TipoServicio" value="@Model.tipo_servicio" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="FechaIngresoAtencion" class="col-form-label">Fecha de Ingreso *</label>
+                            <input type="date" class="form-control me-2" id="FechaIngresoAtencion" name="FechaIngresoAtencion"
+                                   value="@(Model.fecha_ingreso_atencion.HasValue ? Model.fecha_ingreso_atencion.Value.ToString("yyyy-MM-dd") : "")">
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="HoraIngresoAtencion" class="col-form-label">Hora de Ingreso *</label>
+                            <input type="time" class="form-control" id="HoraIngresoAtencion" name="HoraIngresoAtencion"
+                                   value="@Model.hora_ingreso_atencion">
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ServicioIngresoEESS" class="col-form-label">Servicio Ingreso</label>
+                            <input type="text" class="form-control" id="ServicioIngresoEESS" name="ServicioIngresoEESS" value="@Model.servicio_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="MedicoingresoEESS" class="col-form-label">Médico Ingreso</label>
+                            <input type="text" class="form-control" id="MedicoingresoEESS" name="MedicoingresoEESS" value="@Model.medico_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="Prioridad" class="col-form-label">Prioridad</label>
+                            <input type="text" class="form-control" id="Prioridad" name="Prioridad" value="@Model.prioridad" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="Motivo" class="col-form-label">Motivo</label>
+                            <input type="text" class="form-control" id="Motivo" name="Motivo" value="@Model.motivo" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="OrigenAtencionEESS" class="col-form-label">Origen Atención</label>
+                            <input type="text" class="form-control" id="OrigenAtencionEESS" name="OrigenAtencionEESS" value="@Model.origen_atencion_eess" readonly>
+                        </div>
+                        <div class="col-sm-12 mb-2" id="AntecedentesContainer">
+                            <label for="Antecedentes" class="col-form-label">Antecedentes</label>
+                            <textarea class="form-control" id="Antecedentes" name="Antecedentes" maxlength="100" rows="2" readonly>@Html.Raw(Model.antecedentes)</textarea>
+                        </div>
+                        <div class="col-sm-6 mb-2">
+                            <label for="FuenteFinanciamientoId" class="col-form-label">Fuente Financiamiento *</label>
+                            <select class="form-select" id="FuenteFinanciamientoId" name="FuenteFinanciamientoId" onchange="recargarTiposFinanciamiento()">
+                                @if (Model.fuentes_financiamiento != null)
+                                {
+                                    @foreach (var tipo in Model.fuentes_financiamiento)
+                                    {
+                                        if (tipo.fuente_financiamiento_id == Model.fuente_financiamiento_id)
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id" selected>@tipo.descripcion</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id">@tipo.descripcion</option>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No hay fuentes de financiamiento</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6 mb-2">
+                            <label for="TipoFinanciamientoId" class="col-form-label">Tipo Financiamiento *</label>
+                            <select class="form-select" id="TipoFinanciamientoId" name="TipoFinanciamientoId">
+                                @foreach (var tipo in Model.tipos_financiamiento)
+                                {
+                                    if (tipo.tipo_financiamiento_id == Model.tipo_financiamiento_id)
+                                    {
+                                        <option value="@tipo.tipo_financiamiento_id" selected>@tipo.descripcion</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@tipo.tipo_financiamiento_id">@tipo.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                            <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                                <i class="material-icons me-2">verified_user</i> AUDITORIA
+                            </span>
+
+                            <div class="row m-2 ms-2">
+                                <div class="col-sm-12 mb-2">
+                                    <input type="hidden" id="AuditoriaTriajeCodigoEstadoHidden" value="@Model.auditoria_triaje_codigo_estado">
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input"
+                                                   id="AuditoriaTriajeCorrecto"
+                                                   name="AuditoriaTriajeCodigoEstado"
+                                                   value="2"
+                                                   onchange="AbrirObservacionTriaje()"
+                                            @(Model.auditoria_triaje_codigo_estado == 2 ? "checked" : "")>
+                                            <label class="form-check-label" for="AuditoriaTriajeCorrecto">Aceptado</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input"
+                                                   id="AuditoriaTriajeObservado"
+                                                   name="AuditoriaTriajeCodigoEstado"
+                                                   value="3"
+                                                   onchange="AbrirObservacionTriaje()"
+                                            @(Model.auditoria_triaje_codigo_estado == 3 ? "checked" : "")
+                                                   data-subsana-obs="@Model.auditoria_triaje_subsana_obs">
+                                            <label class="form-check-label" for="AuditoriaTriajeObservado">Observado</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="AuditoriaObservacionContainer" style="display: none;">
+                                <div class="row m-2 ms-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="col-sm-12 mb-2">
+                                            <div class="form-group">
+                                                <textarea class="form-control"
+                                                          id="AuditoriaTriajeObservacion"
+                                                          name="AuditoriaTriajeObservacion"
+                                                          maxlength="100"
+                                                          rows="2"
+                                                          aria-describedby="AuditoriaTriajeObservacionHelp">@Html.Raw(Model.auditoria_triaje_observacion)</textarea>
+                                                <small id="AuditoriaTriajeObservacionHelp" class="form-text text-muted">
+                                                    Ingrese la observación de la auditoria* (máximo 100 caracteres).
+                                                </small>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row m-2 ms-2">
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <div class="col-sm-2 mb-2" id="AuditoriaTriajeSubsanaObsCheckContainer" style="display: none;">
+                                            <div class="d-flex justify-content-between w-100 gap-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           id="AuditoriaTriajeSubsanaObs"
+                                                           name="AuditoriaTriajeSubsanaObs"
+                                                           style="accent-color: var(--bs-primary);"
+                                                           onchange="SubsanarObservacion()"
+                                                    @(Model.auditoria_triaje_subsana_obs == true ? "checked" : "")>
+                                                    <label class="form-check-label text-success fw-bold" for="AuditoriaTriajeSubsanaObs">
+                                                        Subsanar
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-10 mb-2" id="AuditoriaTriajeSubsanaObsTextoContainer" style="display: none;">
+                                            <div class="form-group">
+                                                <textarea class="form-control text-start align-text-top"
+                                                          id="AuditoriaTriajeSubsanaObsTexto"
+                                                          name="AuditoriaTriajeSubsanaObsTexto"
+                                                          maxlength="100"
+                                                          rows="2"
+                                                          aria-describedby="AuditoriaTriajeSubsanaObsTextoHelp">@Html.Raw(Model.auditoria_triaje_subsana_obs_texto)</textarea>
+                                                <small id="AuditoriaTriajeSubsanaObsTextoHelp" class="form-text text-muted">
+                                                    Ingrese el comentario de la subsanación (máximo 100 caracteres).
+                                                </small>
+                                            </div>                                          
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            @*   <div class="row m-2 ms-2">
+                            <div class="col-sm-12 mb-2">
+                            <input type="hidden" id="AuditoriaTriajeCodigoEstadoHidden" value="@Model.AuditoriaTriajeCodigoEstado">
+                            <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                            <input type="radio" class="form-check-input" id="AuditoriaTriajeCorrecto" name="AuditoriaTriajeCodigoEstado" value="2" onchange="AbrirObservacionTriaje()">
+                            <label class="form-check-label" for="AuditoriaTriajeCorrecto">Aceptado</label>
+                            </div>
+                            <div class="form-check">
+                            <input type="radio" class="form-check-input" id="AuditoriaTriajeObservado" name="AuditoriaTriajeCodigoEstado" value="3" onchange="AbrirObservacionTriaje()">
+                            <label class="form-check-label" for="AuditoriaTriajeObservado">Observado</label>
+                            </div>
+                            </div>
+                            </div>
+
+                            </div>
+
+                            <div class="row m-2 ms-2" id="AuditoriaObservacionContainer" style="display: none;">
+                            <div class="col-sm-6 mb-2">
+                            <div class="d-flex justify-content-between w-100 gap-2">
+                            <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="abrirModalObservacion(0)">
+                            <i class="material-icons">add</i>
+                            <span class="btn-text">Agregar observación</span>
+                            </button>
+                            </div>
+                            </div>
+                            <div class="col-sm-12 mb-2">
+                            <table class="table table-bordered table-hover">
+                            <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                            <tr>
+                            <th></th>
+                            <th>Nro</th>
+                            <th>Observación</th>
+                            <th>Estado</th>
+                            <th></th>
+                            </tr>
+                            </thead>
+                            <tbody id="observacionesTableBody" style="font-family: 'Open Sans', sans-serif;">
+                            @foreach (var observacion in Model.ObservacionesTriaje)
+                            {
+                            <tr>
+                            <td class="text-center">
+                            <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="abrirModalObservacion(@observacion.Indice)" data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Observación">
+                            <i class="material-icons">edit</i>
+                            </button>
+                            <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="eliminarObservacion(@observacion.Indice)" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar Observación">
+                            <i class="material-icons">delete</i>
+                            </button>
+                            </td>
+                            <td class="small campo-grilla">@observacion.Indice</td>
+                            <td class="small campo-grilla">@observacion.Observacion</td>
+                            <td class="small campo-grilla">@observacion.EstadoObservacion</td>
+                            <td class="text-center">
+                            <button type="button" class="btn btn-success w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="abrirModalObservacion(@observacion.Indice)" data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Observación">
+                            <i class="material-icons">check_circle</i>
+                            </button>
+                            </td>
+                            </tr>
+                            }
+                            </tbody>
+                            </table>
+                            </div>
+
+
+                            </div>
+                            *@
+
+                        </div>
+
+
+                        @* <div class="accordion" id="accordionAuditoria">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingAuditoria">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuditoria" aria-expanded="true" aria-controls="collapseAuditoria">
+                                        <i class="material-icons me-2">verified_user</i> Auditoria
+                                    </button>
+                                </h2>
+                                <div id="collapseAuditoria" class="accordion-collapse collapse show" aria-labelledby="headingAuditoria" data-bs-parent="#accordionAuditoria">
+                                    <div class="accordion-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> *@
+
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                            <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                                <i class="material-icons me-2">info</i> DETALLE FUENTE FINANCIAMIENTO
+                            </span>
+                            <div id="contenedorSis" style="display: none;">
+                                <div class="row m-2 ms-2">
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="d-flex justify-content-between w-100 gap-2">
+                                            <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="AbrirModalSIS()">
+                                                <i class="material-icons">search</i>
+                                                <span class="btn-text">Consultar Afiliación SIS</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-2 ms-2">                                   
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoDisa" class="col-form-label">Disa</label>
+                                        <input type="text" class="form-control" id="SisAseguradoDisa" name="SisAseguradoDisa" maxlength="3" oninput="validarLongitud(this, 3)" value="@Model.sis_asegurado_disa" disabled>
+                                    </div>
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoLote" class="col-form-label">Lote</label>
+                                        <input type="text" class="form-control" id="SisAseguradoLote" name="SisAseguradoLote" maxlength="2" oninput="validarLongitudLote(this)" value="@Model.sis_asegurado_lote" disabled>
+                                    </div>
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoNumero" class="col-form-label">Numero</label>
+                                        <input type="text" class="form-control" id="SisAseguradoNumero" name="SisAseguradoNumero" minlength="8" maxlength="9" oninput="validarLongitud(this, 9)" value="@Model.sis_asegurado_numero" disabled>
+                                    </div>                                 
+                                   
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoFechaAfiliacion" class="col-form-label">Fecha Afiliación</label>
+                                        <input type="text" class="form-control" id="SisAseguradoFechaAfiliacion" name="SisAseguradoFechaAfiliacion" value="@Model.sis_asegurado_fecha_afiliacion" disabled>
+                                    </div>
+
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoDescTipoSeguro" class="col-form-label">Tipo Seguro</label>
+                                        <input type="text" class="form-control" id="SisAseguradoDescTipoSeguro" name="SisAseguradoDescTipoSeguro" value="@Model.sis_asegurado_desc_tipo_seguro" disabled>
+                                    </div>
+
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="SisAseguradoEstado" class="col-form-label">Estado</label>
+                                        <input type="text" class="form-control" id="SisAseguradoEstado" name="SisAseguradoEstado" value="@Model.sis_asegurado_estado" disabled>
+                                    </div>                                    
+                                    
+                                    <input type="hidden" id="SisAseguradoComponente" name="SisAseguradoComponente" value="@Model.sis_asegurado_componente">
+                                    <input type="hidden" id="SisAseguradoCorrelativo" name="SisAseguradoCorrelativo" value="@Model.sis_asegurado_correlativo">
+                                    <input type="hidden" id="SisAseguradoTipoTabla" name="SisAseguradoTipoTabla" value="@Model.sis_asegurado_tipo_tabla">
+                                    <input type="hidden" id="SisAseguradoIdentificador" name="SisAseguradoIdentificador" value="@Model.sis_asegurado_identificador">
+
+                                    <input type="hidden" id="SisAseguradoPlanCobertura" name="SisAseguradoPlanCobertura" value="@Model.sis_asegurado_plan_cobertura">
+                                    <input type="hidden" id="SisAseguradoGrpPoblacional" name="SisAseguradoGrpPoblacional" value="@Model.sis_asegurado_grp_poblacional">                                   
+                                    <input type="hidden" id="SisAseguradoTipoSeguro" name="SisAseguradoTipoSeguro" value="@Model.sis_asegurado_tipo_seguro">
+
+
+                                </div>
+                            </div>
+                            <div id="contenedorParticular" style="display: none;">
+                                <div class="row m-2 ms-2">
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="d-flex justify-content-between w-100 gap-2">
+                                            <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="AbrirModalParticular()">
+                                                <i class="material-icons">search</i>
+                                                <span class="btn-text">Consultar Comprobante Pago</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-2 ms-2">
+                                    <div class="col-sm-4 mb-2">
+                                        <label for="ParticularBoletaApertura" class="col-form-label">Nro Comprobante Pago</label>
+                                        <input type="text" class="form-control" id="ParticularBoletaApertura" name="ParticularBoletaApertura" maxlength="20" value="@Model.particular_boleta_apertura" disabled>
+                                    </div>
+                                    <div class="col-sm-8 mb-2">
+                                        <label for="ParticularConceptoBoleta" class="col-form-label">Concepto Comprobante Pago</label>
+                                        <input type="text" class="form-control" id="ParticularConceptoBoleta" name="ParticularConceptoBoleta" maxlength="80" value="@Model.particular_concepto_boleta" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* <div class="accordion" id="accordionFuenteFinanciamiento">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingDatosAsegurado">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFuenteFinanciamiento" aria-expanded="true" aria-controls="collapseFuenteFinanciamiento">
+                                        <i class="material-icons me-2">info</i> Detalle fuente financiamiento
+                                    </button>
+                                </h2>
+                                <div id="collapseFuenteFinanciamiento" class="accordion-collapse collapse show" aria-labelledby="headingFuenteFinanciamiento" data-bs-parent="#accordionFuenteFinanciamiento">
+                                    <div class="accordion-body">                                       
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>            
+</div>
+
+<!-- Modal Formatos -->
+<div id="formatosModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="formatosModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formatosModalLabel">Formatos del pac.</h5>
+                <button type="button" id="closeModalFormatos" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí va el contenido del modal -->
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action">HIST. CLÍNICA</button>
+                    <button type="button" class="list-group-item list-group-item-action">FICHA ATENCIÓN</button>
+                    <button type="button" class="list-group-item list-group-item-action active">RECETA</button>
+                    <button type="button" class="list-group-item list-group-item-action">ORDENES</button>
+                    <button type="button" class="list-group-item list-group-item-action">FUA</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Ver</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Consulta-->
+<div id="consultasModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="consultasModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultasModalLabel">
+                    <i class="material-icons">medical_services</i>
+                    Consultas de HC
+                </h5>
+                <button type="button" id="closeModalConsultas" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Lista de opciones en el modal -->
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">assignment</i>
+                        <span class="ml-2">HIST. CLÍNICA</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">event</i>
+                        <span class="ml-2">ATENCIONES</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">local_hospital</i>
+                        <span class="ml-2">ENFERMERÍA</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">timeline</i>
+                        <span class="ml-2">EVOLUCIONES</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">science</i>
+                        <span class="ml-2">LABO. RESULT.</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">medication</i>
+                        <span class="ml-2">INF. MÉDICOS RX</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">local_hospital</i>
+                        <span class="ml-2">INTERV. QUIRUR.</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary d-flex align-items-center">
+                    <i class="material-icons">folder</i>
+                    <span class="ml-2">Ver</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/triaje.js?v=@DateTime.Now.Ticks"></script>

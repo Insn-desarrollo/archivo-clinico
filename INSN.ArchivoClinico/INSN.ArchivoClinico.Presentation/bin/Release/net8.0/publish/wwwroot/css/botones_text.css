@@ -1,0 +1,42 @@
+﻿.input-group-text {
+    background-color: #fff;
+    border-right: 0;
+}
+
+.form-control {
+    border-left: 0;
+}
+
+.input-group-prepend .material-icons,
+.input-group-append .material-icons {
+    color: #fff;
+    background-color: #007bff;
+    padding: 6px 12px;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #007bff;
+}
+
+.input-group-prepend {
+    border: 1px solid #007bff;
+    border-right: 0;
+}
+
+.input-group-append {
+    border: 1px solid #007bff;
+    border-left: 0;
+}
+
+    .input-group-append .btn {
+        border-left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .input-group-append .btn .material-icons {
+            margin-right: 0;
+        }
+
+.btn-sm .material-icons {
+    font-size: 18px; /* Ajusta el tamaño del icono según sea necesario */
+}

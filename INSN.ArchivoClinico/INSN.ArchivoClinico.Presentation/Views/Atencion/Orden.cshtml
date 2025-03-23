@@ -1,0 +1,510 @@
+﻿@inject IConfiguration Configuration;
+@using System;
+
+@{
+    ViewData["Title"] = "Archivo Clínico";
+    var username = Context.Request.Cookies["NombreUsuario"];
+    var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    ViewBag.Cargando = ViewBag.Cargando ?? false;
+    var ApiAuditoriaMedicaUrl = Configuration["AppConfig:Auditoria"];
+}
+@model INSN.ArchivoClinico.Domain.Entities.AtencionDto
+
+<link href="~/css/principal.css" rel="stylesheet" />
+<link href="~/css/menu.css" rel="stylesheet" />
+
+<div id="main-content" class="col-md-12 col-sm-12">
+    <input type="hidden" id="idAtencionHidden" name="idAtencionHidden" value="@Model.atencion_id">
+
+    <div class="container-fluid">       
+        <div class="row m-2">
+            <div class="col-md-12">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">badge</i> DATOS DEL PACIENTE
+                    </span>
+                    <div class="row m-2">
+                        <div class="col-sm-2 mb-2">
+                            <label for="CuentaAtencionId" class="col-form-label">Cuenta Atención</label>
+                            <input type="text" class="form-control" id="CuentaAtencionId" name="CuentaAtencionId" value="@Model.cuenta_atencion_id" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HistoriaClinica" class="col-form-label">Historia Clínica</label>
+                            <input type="text" class="form-control" id="HistoriaClinica" name="HistoriaClinica" value="@Model.historia_clinica" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TiposDocumento" class="col-form-label">Tipo Documento</label>
+                            <input type="text" class="form-control" id="TiposDocumento" name="TiposDocumento" value="@Model.tipos_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="NumeroDocumento" class="col-form-label">Número Documento</label>
+                            <input type="text" class="form-control" id="NumeroDocumento" name="NumeroDocumento" value="@Model.numero_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TipoSexo" class="col-form-label">Sexo</label>
+                            <input type="text" class="form-control" id="TipoSexo" name="TipoSexo" value="@Model.tipo_sexo" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento</label>
+                            <input type="text" class="form-control" id="FechaNacimiento" name="FechaNacimiento" value="@Model.fecha_nacimiento" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoPaterno" class="col-form-label">Apellido Paterno</label>
+                            <input type="text" class="form-control" id="ApellidoPaterno" name="ApellidoPaterno" value="@Model.apellido_paterno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoMaterno" class="col-form-label">Apellido Materno</label>
+                            <input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" value="@Model.apellido_materno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="Nombres" class="col-form-label">Nombres</label>
+                            <input type="text" class="form-control" id="Nombres" name="Nombres" value="@Model.nombres" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-12">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">login</i> DATOS DE LA ATENCIÓN
+                    </span>
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-3 mb-2">
+                            <label for="TipoServicio" class="col-form-label">Tipo Servicio</label>
+                            <input type="text" class="form-control" id="TipoServicio" name="TipoServicio" value="@Model.tipo_servicio" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="ServicioIngresoEESS" class="col-form-label">Servicio Ingreso</label>
+                            <input type="text" class="form-control" id="ServicioIngresoEESS" name="ServicioIngresoEESS" value="@Model.servicio_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaIngresoAtencion" class="col-form-label">Fecha de Ingreso</label>
+                            <input type="date" class="form-control me-2" id="FechaIngresoAtencion" name="FechaIngresoAtencion" readonly
+                                   value="@(Model.fecha_ingreso_atencion.HasValue ? Model.fecha_ingreso_atencion.Value.ToString("yyyy-MM-dd") : "")">
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HoraIngresoAtencion" class="col-form-label">Hora de Ingreso</label>
+                            <input type="time" class="form-control" id="HoraIngresoAtencion" name="HoraIngresoAtencion" readonly
+                                   value="@Model.hora_ingreso_atencion">
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="Prioridad" class="col-form-label">Prioridad</label>
+                            <input type="text" class="form-control" id="Prioridad" name="Prioridad" value="@Model.prioridad" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="MedicoingresoEESS" class="col-form-label">Médico Ingreso</label>
+                            <input type="text" class="form-control" id="MedicoingresoEESS" name="MedicoingresoEESS" value="@Model.medico_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="Motivo" class="col-form-label">Motivo</label>
+                            <input type="text" class="form-control" id="Motivo" name="Motivo" value="@Model.motivo" readonly>
+                        </div>                      
+                        <div class="col-sm-3 mb-2">
+                            <label for="FuenteFinanciamientoId" class="col-form-label">Fuente Financiamiento</label>
+                            <select class="form-select" id="FuenteFinanciamientoId" name="FuenteFinanciamientoId" onchange="recargarTiposFinanciamiento()" disabled>
+                                @if (Model.fuentes_financiamiento != null)
+                                {
+                                    @foreach (var tipo in Model.fuentes_financiamiento)
+                                    {
+                                        if (tipo.fuente_financiamiento_id == Model.fuente_financiamiento_id)
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id" selected>@tipo.descripcion</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id">@tipo.descripcion</option>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No hay fuentes de financiamiento</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="TipoFinanciamientoId" class="col-form-label">Tipo Financiamiento</label>
+                            <select class="form-select" id="TipoFinanciamientoId" name="TipoFinanciamientoId" disabled>
+                                @if (Model.tipos_financiamiento != null)
+                                {
+                                    @foreach (var tipo in Model.tipos_financiamiento)
+                                    {
+                                        if (tipo.tipo_financiamiento_id == Model.tipo_financiamiento_id)
+                                        {
+                                            <option value="@tipo.tipo_financiamiento_id " selected>@tipo.descripcion</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@tipo.tipo_financiamiento_id">@tipo.descripcion</option>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No hay tipos de financiamiento</option>
+                                }                               
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>           
+        </div>  
+        
+        <div class="row m-2">
+            <div class="col-md-4">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm" id="tablaEvaluaciones">
+                        <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                            <tr>
+                            <tr>
+                                <th colspan="6">EVALUACIONES</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="text-center">Nro</th>
+                                <th scope="col">Fecha de Evaluación</th>
+                                <th scope="col">Hora de Evaluación</th>
+                                <th scope="col">Estado Receta</th>
+                                <th scope="col">Estado Orden</th>
+                                <th scope="col" class="text-center">Detalle</th>
+                            </tr>
+                            </tr>
+                        </thead>
+                        <tbody style="font-family: 'Open Sans', sans-serif;">
+                            @if (Model.evaluaciones != null && Model.evaluaciones.Any())
+                            {
+                                foreach (var evaluacion in Model.evaluaciones)
+                                {
+                                    <tr data-id="@evaluacion.evaluacion_eess_id" style="cursor:pointer;" onclick="obtenerEvaluacionDetalles(@evaluacion.evaluacion_eess_id)">
+                                        <td class="text-center">@evaluacion.secuencia</td>
+                                        <td class="text-center">@evaluacion.fecha_evaluacion</td>
+                                        <td class="text-center">@evaluacion.hora_evaluacion</td>
+                                        <td class="text-center">@evaluacion.receta_estado</td>
+                                        <td class="text-center">@evaluacion.orden_estado</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-secondary d-flex align-items-center style='width: 2.5rem; height: 2.5rem;' justify-content-center gap-2 responsive-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle Evaluación">
+                                                <i class="material-icons">edit_note</i>
+                                            </button>                                         
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-danger">No hay evaluaciones disponibles.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>              
+            </div>
+            
+            <div class="col-md-8">
+                <div id="loadingOverlay" class="d-none position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-75 text-center" style="z-index: 1050;">
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Cargando...</span>
+                        </div>
+                        <p class="mt-2">Cargando resultados...</p>
+                    </div>
+                </div>
+                <input type="hidden" id="idEvaluacionSeleccionada" name="idEvaluacionSeleccionada" value="" />
+
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">badge</i> DETALLE DE LA EVALUACIÓN
+                    </span>
+                    <input type="hidden" id="idEvaluacionHidden" name="idEvaluacionHidden">
+                    <input type="hidden" id="idEvaluacionEESSHidden" name="idEvaluacionEESSHidden">                    
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaEvaluacion" class="col-form-label">Fecha Evaluación</label>
+                            <input type="date" class="form-control me-2" id="FechaEvaluacion" name="FechaEvaluacion" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HoraEvaluacion" class="col-form-label" readonly>Hora Evaluación</label>
+                            <input type="text" class="form-control" id="HoraEvaluacion" name="HoraEvaluacion" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ServicioEESS" class="col-form-label">Servicio</label>
+                            <input type="text" class="form-control" id="ServicioEESS" name="ServicioEESS" readonly>
+                        </div>
+                        <div class="col-sm-4 d-flex flex-column justify-content-end" style="height: 100%;">
+                            <div class="d-flex flex-wrap w-100 gap-2">
+                                <button id="btnAceptarMasivo" class="btn btn-sincronizar-registro d-flex align-items-center flex-grow-1" type="button" onclick="aceptarMasivo()">
+                                    <i class="material-icons me-2">check_circle</i>Aceptar todos los exámenes auxiliares y medicamentos
+                                </button>
+                                <button id="btnEnviarRecetaOrden" class="btn btn-buscar-registro d-flex align-items-center flex-grow-1" type="button" onclick="registrarReceta()">
+                                    <i class="material-icons me-2">check_circle</i>Enviar exámenes auxiliares y medicamentos a los servicios
+                                </button>                           
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row m-2 ms-2" style="display: none;">
+                        <input type="hidden" id="AuditoriaEvaluacionCodigoEstadoHidden">
+                        <div class="col-sm-3 mb-3">
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="EvaluacionCorrecto" name="EvaluacionObservacion" value="2" onchange="AbrirObservacionEvaluacion()">
+                                <label class="form-check-label" for="EvaluacionCorrecto">Aceptado</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="EvaluacionObservado" name="EvaluacionObservacion" value="3" onchange="AbrirObservacionEvaluacion()">
+                                <label class="form-check-label" for="EvaluacionObservado">Observado</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9 mb-3" id="AuditoriaEvaluacionObservacionContainer" style="display: none;">
+                            <label for="AuditoriaEvaluacionObservacion" class="col-form-label">Observación *</label>
+                            <textarea class="form-control" id="AuditoriaEvaluacionObservacion" name="AuditoriaEvaluacionObservacion" maxlength="100" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-12 mb-3">
+                            <div class="accordion" id="accordionDiagnosticosAtencion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingDiagnosticosAtencion">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiagnosticosAtencion" aria-expanded="true" aria-controls="collapseDiagnosticosAtencion">
+                                            Diagnósticos
+                                        </button>
+                                    </h2>
+                                    <div id="collapseDiagnosticosAtencion" class="accordion-collapse collapse show" aria-labelledby="headingDiagnosticosAtencion">
+                                        <div class="accordion-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-sm" id="tablaDiagnosticos">
+                                                    <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                                        <tr>
+                                                            <th scope="col">Número</th>
+                                                            <th scope="col">CIE10</th>
+                                                            <th scope="col">Tipo</th>
+                                                            <th scope="col">Diagnóstico</th>
+                                                            <th scope="col">Principal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="diagnosticosTableBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-12 mb-3">
+                            <div class="accordion" id="accordionExamenesAuxiliaresAtencion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingExamenesAuxiliaresAtencion">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExamenesAuxiliaresAtencion" aria-expanded="true" aria-controls="collapseExamenesAuxiliaresAtencion">
+                                            Exámenes Auxiliares
+                                        </button>
+                                    </h2>
+                                    <div id="collapseExamenesAuxiliaresAtencion" class="accordion-collapse collapse show" aria-labelledby="headingExamenesAuxiliaresAtencion">
+                                        <div class="accordion-body">
+                                            <div class="table-responsive">
+                                                <div class="d-flex justify-content-end align-items-center gap-2">
+                                                    <label id="OrdenEstado" class="fs-6 fw-bold " style="color: rgba(147, 112, 219, 1);"></label>
+                                                </div>                                                                                        
+                                                <table class="table table-striped table-sm" id="tablaMedicamentos">
+                                                    <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                                        <tr>
+                                                            <th scope="col">Auditar</th>                                                            
+                                                            <th scope="col">Grupo</th>
+                                                            <th scope="col">Servicio</th>
+                                                            <th scope="col">Código</th>
+                                                            <th scope="col">Procedimiento</th>
+                                                            <th scope="col">CIE10</th>
+                                                            <th scope="col">Cantidad Prescrita</th>
+                                                            <th scope="col">Cantidad Auditada</th>
+                                                            <th scope="col">Cantidad Entregada (Apoyo Dx)</th>
+                                                            <th scope="col">Estado</th>
+                                                            <th scope="col">Resultado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="procedimientosTableBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-12 mb-3">
+                            <div class="accordion" id="accordionMedicamentosAtencion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingMedicamentosAtencion">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedicamentosAtencion" aria-expanded="true" aria-controls="collapseMedicamentosAtencion">
+                                            Medicamentos
+                                        </button>
+                                    </h2>
+                                    <div id="collapseMedicamentosAtencion" class="accordion-collapse collapse show" aria-labelledby="headingMedicamentosAtencion">
+                                        <div class="accordion-body">
+                                            <div class="table-responsive">
+                                                <div class="d-flex justify-content-end align-items-center gap-2">
+                                                    <label id="RecetaEstado" class="fs-6 fw-bold " style="color: rgba(147, 112, 219, 1);"></label>
+                                                </div>
+
+
+                                                <table class="table table-striped table-sm" id="tablaMedicamentos">
+                                                    <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                                        <tr>
+                                                            <th scope="col">Auditar</th>
+                                                            <th scope="col">Código</th>
+                                                            <th scope="col">Producto</th>
+                                                            <th scope="col">SisMed</th>
+                                                            <th scope="col">Dosis</th>
+                                                            <th scope="col">Días</th>
+                                                            <th scope="col">CIE10</th>
+                                                            <th scope="col">Cantidad Prescrita</th>
+                                                            <th scope="col">Cantidad Auditada</th>
+                                                            <th scope="col">Cantidad Entregada (Apoyo Dx)</th>
+                                                            <th scope="col">Estado</th>
+                                                            <th scope="col">Entregado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="medicamentosTableBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                                
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="evaluacionEessIdHidden" value="">
+    <input type="hidden" id="codigoItemHidden" value="">
+    <input type="hidden" id="auditoriaItemHidden" value="">
+    <input type="hidden" id="auditoriaPuntoCargaHidden" value="">
+    
+</div>
+
+@* <div id="observacionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="observacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="observacionModalLabel">
+                    <i class="material-icons">help_outline</i> Observar
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">¿Estás seguro de grabar la observación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="material-icons">cancel</i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="actualizarObservacion">
+                    <i class="material-icons">check_circle</i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+<!-- Modal Formatos -->
+<div id="formatosModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="formatosModalLabel" inert>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formatosModalLabel">Formatos del pac.</h5>
+                <button type="button" id="closeModalFormatos" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí va el contenido del modal -->
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action">HIST. CLÍNICA</button>
+                    <button type="button" class="list-group-item list-group-item-action">FICHA ATENCIÓN</button>
+                    <button type="button" class="list-group-item list-group-item-action active">RECETA</button>
+                    <button type="button" class="list-group-item list-group-item-action">ORDENES</button>
+                    <button type="button" class="list-group-item list-group-item-action">FUA</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Ver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Consulta-->
+<div id="consultasModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="consultasModalLabel" inert> @* aria-hidden="true"> *@
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultasModalLabel">
+                    <i class="material-icons">medical_services</i>
+                    Consultas de HC
+                </h5>
+                <button type="button" id="closeModalConsultas" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Lista de opciones en el modal -->
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">assignment</i>
+                        <span class="ml-2">HIST. CLÍNICA</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">event</i>
+                        <span class="ml-2">ATENCIONES</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">local_hospital</i>
+                        <span class="ml-2">ENFERMERÍA</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">timeline</i>
+                        <span class="ml-2">EVOLUCIONES</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">science</i>
+                        <span class="ml-2">LABO. RESULT.</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">medication</i>
+                        <span class="ml-2">INF. MÉDICOS RX</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="material-icons">local_hospital</i>
+                        <span class="ml-2">INTERV. QUIRUR.</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary d-flex align-items-center">
+                    <i class="material-icons">folder</i>
+                    <span class="ml-2">Ver</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/orden.js?v=@DateTime.Now.Ticks"></script>

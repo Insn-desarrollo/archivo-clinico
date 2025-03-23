@@ -1,0 +1,6 @@
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.csproj.AssemblyReference.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.AssemblyInfoInputs.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.AssemblyInfo.cs
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.csproj.CoreCompileInputs.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Infrastructure\obj\Debug\net8.0\INSN.Archivo-Clinico.Infrastructure.sourcelink.json

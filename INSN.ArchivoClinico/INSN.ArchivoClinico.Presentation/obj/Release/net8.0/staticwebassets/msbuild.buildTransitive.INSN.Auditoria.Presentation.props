@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\INSN.Auditoria.Presentation.props" />
+</Project>

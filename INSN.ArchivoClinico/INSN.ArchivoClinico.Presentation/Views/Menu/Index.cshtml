@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Archivo Clínico";
+    var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    ViewBag.Cargando = ViewBag.Cargando ?? false;
+}
+
+<link href="~/css/menu.css" rel="stylesheet" />
+@* <link href="~/css/modal-auditoria.css" rel="stylesheet" /> *@
+
+<div class="d-flex vh-100 overflow-hidden">
+    <nav class="bg-menu sidebar d-flex flex-column" id="sidebarMenu">
+        <div class="d-flex justify-content-center mt-3">
+            <img src="~/images/insn_logo.png" class="img-fluid" style="width: 60%;" alt="Logo" />
+        </div>
+
+        <ul class="nav flex-column p-2">
+            @foreach (var menu in ViewBag.MenuItems)
+            {
+                <li class="nav-item" data-flag="@menu.Flag" title="@menu.Text">
+                    <a href="#" class="nav-link menu-item" onclick="cargarVista('@menu.Vista')">
+                        <span class="material-icons">@menu.Icon</span>
+                        <span class="menu-text">@menu.Text</span>
+                        <span class="badge">@menu.Badge</span>
+                    </a>
+                </li>
+            }
+        </ul>        
+    </nav>
+
+    <div class="flex-grow-1 d-flex flex-column">
+        <header class="bg-banner text-white d-flex align-items-center py-2 px-3">
+
+            <div class="col-md-12 col-sm-12">
+
+                <div class="barra-auditoria d-flex justify-content-between align-items-center p-2">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-light" id="menu-alternar" onclick="toggleMenu()">
+                            <i class="material-icons">menu</i>
+                        </button>                       
+                    </div>
+
+                    <div class="contenedor-fecha-actual mx-auto d-flex align-items-center">
+                       @*  <i class="material-icons">calendar_today</i>
+                        <span>@fechaActual</span> *@
+@*                         &nbsp; *@
+                        <h2 class="d-flex align-items-center">
+                            <i class="material-icons mr-3">personal_injury</i> Archivo Clínico
+                        </h2>
+                    </div>
+
+
+                    <div class="d-flex align-items-center contenedor-usuario">
+                        <i class="material-icons">supervised_user_circle</i>
+                        <span>@ViewBag.NombreUsuario</span>
+                        <i class="material-icons" onclick="toggleUsuario()">keyboard_arrow_down</i>
+
+                        <div id="userMenu" class="user-menu">
+                            <a href="@Url.Action("Logout", "Account")">Cerrar Sesión</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </header>
+
+        <input type="hidden" id="idAtencionSeleccionadaHidden" name="idAtencionSeleccionadaHidden">
+        <input type="hidden" id="guidFuaHidden" name="guidFuaHidden">
+        <input type="hidden" id="idAtencionFUAHidden" name="idAtencionFUAHidden">
+        <main class="p-3 flex-grow-1 overflow-auto" id="contenido">
+            <h2>Bienvenido al Menú Principal</h2>
+            <p>Selecciona una opción en el menú para cargar el contenido.</p>
+        </main>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/menu.js?v=@DateTime.Now.Ticks"></script>
+@* <script src="~/js/menu.js"></script> *@
+
+

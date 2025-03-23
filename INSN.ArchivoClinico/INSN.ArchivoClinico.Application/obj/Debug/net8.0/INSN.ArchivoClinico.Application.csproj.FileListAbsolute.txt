@@ -1,0 +1,16 @@
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\bin\Debug\net8.0\INSN.ArchivoClinico.Application.deps.json
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\bin\Debug\net8.0\INSN.ArchivoClinico.Application.dll
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\bin\Debug\net8.0\INSN.ArchivoClinico.Application.pdb
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\bin\Debug\net8.0\INSN.ArchivoClinico.Domain.dll
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\bin\Debug\net8.0\INSN.ArchivoClinico.Domain.pdb
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.csproj.AssemblyReference.cache
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.GeneratedMSBuildEditorConfig.editorconfig
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.AssemblyInfoInputs.cache
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.AssemblyInfo.cs
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.csproj.CoreCompileInputs.cache
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.sourcelink.json
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.Arc.61B73292.Up2Date
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.dll
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\refint\INSN.ArchivoClinico.Application.dll
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\INSN.ArchivoClinico.Application.pdb
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Application\obj\Debug\net8.0\ref\INSN.ArchivoClinico.Application.dll

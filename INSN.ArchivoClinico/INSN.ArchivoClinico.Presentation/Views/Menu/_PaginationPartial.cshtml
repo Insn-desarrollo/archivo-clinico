@@ -1,0 +1,35 @@
+﻿@* Vista Principal *@
+@{
+    Layout = "_Layout";
+}
+
+<div id="paginationContainer" class="mb-2" style="display: none;">
+    <div class="d-flex align-items-center justify-content-center">
+        <!-- Navegación de la paginación -->
+        <nav aria-label="Page navigation" class="me-3">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" id="paginaAnterior">
+                    <a class="page-link" href="javascript:void(0)" aria-label="Previous" onclick="paginaAnterior()">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" id="infoPaginacion">Página 1 de 1</span>
+                </li>
+                <li class="page-item" id="PaginaSiguiente">
+                    <a class="page-link" href="javascript:void(0)" aria-label="Next" onclick="paginaSiguiente()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Total de registros al lado derecho -->
+        <div>
+            <span id="totalRegistros">Total de registros: 0</span>
+        </div>
+    </div>
+</div>
+
+
+

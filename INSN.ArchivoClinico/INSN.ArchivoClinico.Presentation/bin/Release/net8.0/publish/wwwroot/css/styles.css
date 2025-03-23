@@ -1,0 +1,118 @@
+﻿body {
+    font-family: Arial, sans-serif;
+}
+
+.nav-link {
+    width: 100px; /* Ajusta el ancho según sea necesario */
+    text-align: center;
+    padding: 10px 0;
+}
+
+    .nav-link i.material-icons {
+        font-size: 24px;
+    }
+
+    .nav-link.active {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .nav-link.btn-light {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    .nav-link:hover {
+        background-color: #003366;
+        color: white;
+    }
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #0056b3;
+}
+
+.btn i.material-icons {
+    font-size: 24px;
+}
+
+.btn span {
+    font-size: 14px;
+}
+
+.btn {
+    width: 100px; /* Ajusta el ancho según sea necesario */
+    height: 70px; /* Ajusta la altura según sea necesario */
+    text-align: center;
+    padding: 5px;
+}
+
+.btn-outline-success {
+    border: 2px solid #28a745;
+    color: #28a745;
+}
+
+.btn-outline-info {
+    border: 2px solid #17a2b8;
+    color: #17a2b8;
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-danger {
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-person {
+    border: 2px solid #0a53be;
+    color: #0a53be;
+}
+
+.input-group-text {
+    background-color: #fff;
+    border-right: 0;
+}
+
+.form-control {
+    border-left: 0;
+}
+
+.input-group-prepend .material-icons,
+.input-group-append .material-icons {
+    color: #fff;
+    background-color: #007bff;
+    padding: 6px 12px;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #007bff;
+}
+
+.input-group-prepend {
+    border: 1px solid #007bff;
+    border-right: 0;
+}
+
+.input-group-append {
+    border: 1px solid #007bff;
+    border-left: 0;
+}
+
+    .input-group-append .btn {
+        border-left: 0;
+    }
+
+        .input-group-append .btn .material-icons {
+            margin-right: 0;
+        }
+
+.custom-container {
+    max-width: 2000px; /* Ajusta el valor según tus necesidades */
+}

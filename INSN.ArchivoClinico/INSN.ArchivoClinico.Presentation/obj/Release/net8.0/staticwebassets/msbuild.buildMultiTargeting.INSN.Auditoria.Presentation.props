@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\INSN.Auditoria.Presentation.props" />
+</Project>

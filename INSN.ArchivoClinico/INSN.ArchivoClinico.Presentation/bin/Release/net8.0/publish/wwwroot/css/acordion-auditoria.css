@@ -1,0 +1,91 @@
+﻿.card-insn-acordion {
+    border: 1px solid rgba(255, 191, 163, 1);
+    border-radius: 10px;
+    padding: 1rem;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/*.card-insn-acordion:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(255, 191, 163, 1);
+}*/
+
+/* Estilo para el Accordion */
+.insn-acordion-item {
+    border: none;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.insn-acordion-button {
+    background: rgba(255, 191, 163, 1);
+    border: 1px solid rgba(255, 191, 163, 1);
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px 8px 2pc 2pc;
+    color: #ffffff;
+}
+
+.insn-acordion-button i {
+    color: #ffffff;
+}
+
+.insn-acordion-button:not(.collapsed) {
+    color: #ffffff; 
+    background: rgba(255, 191, 163, 1); 
+}
+
+.accordion-button::after {
+    color: #ffffff;
+}
+
+.insn-acordion-button:hover {
+    background: rgba(255, 191, 163, 1);
+    box-shadow: 0 0 8px rgba(255, 191, 163, 1);
+    color: #ffffff;
+}
+
+/* Estilo para los Inputs dentro del Accordion */
+.insn-acordion-body .form-control {
+    background: rgba(255, 255, 255, 0.95); 
+    color: #000000; 
+    border: 1px solid #007bff; 
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.insn-acordion-body .form-control:focus {
+    border-color: #007bff;
+}
+
+.insn-acordion-body .form-label {
+    color: #007bff; 
+    font-weight: bold;
+}
+
+.border-title {
+    position: absolute;
+    top: -14px; 
+    left: 10px; 
+    background-color: white; 
+    padding: 0 5px; 
+}
+
+
+.nav-tabs .nav-link {
+    background-color: rgba(255, 191, 163, 1); /* Fondo de la cabecera del tab */
+    color: #ffffff; /* Color de la letra */
+    border-color: transparent;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+    .nav-tabs .nav-link:hover {
+        background-color: rgba(255, 191, 163, 1); /* Fondo al hacer hover */
+        box-shadow: 0 0 8px rgba(255, 191, 163, 1); /* Efecto de sombra al hacer hover */
+        color: #ffffff; /* Color de la letra al hacer hover */
+    }
+
+    .nav-tabs .nav-link.active {
+        background-color: #ffffff; /* Fondo por defecto cuando está seleccionado */
+        color: #000000; /* Color del texto por defecto */
+        box-shadow: none; /* Sin sombra cuando está seleccionado */
+    }

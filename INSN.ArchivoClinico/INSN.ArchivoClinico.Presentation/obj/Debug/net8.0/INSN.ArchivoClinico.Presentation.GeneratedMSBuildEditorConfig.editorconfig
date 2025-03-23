@@ -1,0 +1,139 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = INSN.ArchivoClinico.Presentation
+build_property.RootNamespace = INSN.ArchivoClinico.Presentation
+build_property.ProjectDir = H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation
+build_property._RazorSourceGeneratorDebug = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Account/ErrorLogin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFcnJvckxvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Cuenta.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cQ3VlbnRhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Orden.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cT3JkZW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Triaje.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cVHJpYWplLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Home/_OrdenesPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfT3JkZW5lc1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Home/_TriajePartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfVHJpYWplUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/InformacionAtenciones/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5mb3JtYWNpb25BdGVuY2lvbmVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_AdminPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfQWRtaW5QYXJ0aWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_CuentasPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfQ3VlbnRhc1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_FormAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfRm9ybUFkbWluLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_FormAtenciones.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfRm9ybUF0ZW5jaW9uZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_FormOrdenes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfRm9ybU9yZGVuZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_FormSIS.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfRm9ybVNJUy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_OrdenesPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfT3JkZW5lc1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_PaginationPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfUGFnaW5hdGlvblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_SISPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfU0lTUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_TablaAteAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfVGFibGFBdGVBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_TablaAtenciones.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfVGFibGFBdGVuY2lvbmVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_TablaAteOrdenes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfVGFibGFBdGVPcmRlbmVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_TablaAteSIS.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfVGFibGFBdGVTSVMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Menu/_TriajePartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfVHJpYWplUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-2wtl7ad55t

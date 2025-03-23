@@ -1,0 +1,416 @@
+﻿@{
+    ViewData["Title"] = "Archivo Clínico";
+    var username = Context.Request.Cookies["NombreUsuario"];
+    var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    ViewBag.Cargando = ViewBag.Cargando ?? false;
+}
+@model INSN.ArchivoClinico.Domain.Entities.AtencionDto
+
+<link href="~/css/acordion-auditoria.css" rel="stylesheet" />
+<link href="~/css/principal.css" rel="stylesheet" />
+<link href="~/css/menu.css" rel="stylesheet" />
+
+<div id="main-content" class="col-md-12 col-sm-12">
+    <input type="hidden" id="idAtencionHidden" name="idAtencionHidden" value="@Model.atencion_id">
+
+    <div class="container-fluid">
+        <div class="row m-2">
+            <div class="col-md-12">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">badge</i> DATOS DEL PACIENTE
+                    </span>
+                    <div class="row m-2">
+                        <div class="col-sm-2 mb-2">
+                            <label for="CuentaAtencionId" class="col-form-label">Cuenta Atención</label>
+                            <input type="text" class="form-control" id="CuentaAtencionId" name="CuentaAtencionId" value="@Model.cuenta_atencion_id" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HistoriaClinica" class="col-form-label">Historia Clínica</label>
+                            <input type="text" class="form-control" id="HistoriaClinica" name="HistoriaClinica" value="@Model.historia_clinica" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TiposDocumento" class="col-form-label">Tipo Documento</label>
+                            <input type="text" class="form-control" id="TiposDocumento" name="TiposDocumento" value="@Model.tipos_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="NumeroDocumento" class="col-form-label">Número Documento</label>
+                            <input type="text" class="form-control" id="NumeroDocumento" name="NumeroDocumento" value="@Model.numero_documento" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="TipoSexo" class="col-form-label">Sexo</label>
+                            <input type="text" class="form-control" id="TipoSexo" name="TipoSexo" value="@Model.tipo_sexo" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaNacimiento" class="col-form-label">Fecha de Nacimiento</label>
+                            <input type="text" class="form-control" id="FechaNacimiento" name="FechaNacimiento" value="@Model.fecha_nacimiento" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoPaterno" class="col-form-label">Apellido Paterno</label>
+                            <input type="text" class="form-control" id="ApellidoPaterno" name="ApellidoPaterno" value="@Model.apellido_paterno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="ApellidoMaterno" class="col-form-label">Apellido Materno</label>
+                            <input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" value="@Model.apellido_materno" readonly>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            <label for="Nombres" class="col-form-label">Nombres</label>
+                            <input type="text" class="form-control" id="Nombres" name="Nombres" value="@Model.nombres" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-8">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">login</i> DATOS DE LA ATENCIÓN
+                    </span>
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-3 mb-2">
+                            <label for="TipoServicio" class="col-form-label">Tipo Servicio</label>
+                            <input type="text" class="form-control" id="TipoServicio" name="TipoServicio" value="@Model.tipo_servicio" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="ServicioIngresoEESS" class="col-form-label">Servicio Ingreso</label>
+                            <input type="text" class="form-control" id="ServicioIngresoEESS" name="ServicioIngresoEESS" value="@Model.servicio_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="FechaIngresoAtencion" class="col-form-label">Fecha de Ingreso</label>
+                            <input type="date" class="form-control me-2" id="FechaIngresoAtencion" name="FechaIngresoAtencion" readonly
+                                   value="@(Model.fecha_ingreso_atencion.HasValue ? Model.fecha_ingreso_atencion.Value.ToString("yyyy-MM-dd") : "")">
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="HoraIngresoAtencion" class="col-form-label">Hora de Ingreso</label>
+                            <input type="time" class="form-control" id="HoraIngresoAtencion" name="HoraIngresoAtencion" readonly
+                                   value="@Model.hora_ingreso_atencion">
+                        </div>
+                        <div class="col-sm-2 mb-2">
+                            <label for="Prioridad" class="col-form-label">Prioridad</label>
+                            <input type="text" class="form-control" id="Prioridad" name="Prioridad" value="@Model.prioridad" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="MedicoingresoEESS" class="col-form-label">Médico Ingreso</label>
+                            <input type="text" class="form-control" id="MedicoingresoEESS" name="MedicoingresoEESS" value="@Model.medico_ingreso_eess" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="Motivo" class="col-form-label">Motivo</label>
+                            <input type="text" class="form-control" id="Motivo" name="Motivo" value="@Model.motivo" readonly>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="FuenteFinanciamientoId" class="col-form-label">Fuente Financiamiento</label>
+                            <select class="form-select" id="FuenteFinanciamientoId" name="FuenteFinanciamientoId" onchange="recargarTiposFinanciamiento()" disabled>
+                                @if (Model.fuentes_financiamiento != null)
+                                {
+                                    @foreach (var tipo in Model.fuentes_financiamiento)
+                                    {
+                                        if (tipo.fuente_financiamiento_id == Model.fuente_financiamiento_id)
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id" selected>@tipo.descripcion</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@tipo.fuente_financiamiento_id">@tipo.descripcion</option>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No hay fuentes de financiamiento</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3 mb-2">
+                            <label for="TipoFinanciamientoId" class="col-form-label">Tipo Financiamiento</label>
+                            <select class="form-select" id="TipoFinanciamientoId" name="TipoFinanciamientoId" disabled>
+                                @foreach (var tipo in Model.tipos_financiamiento)
+                                {
+                                    if (tipo.tipo_financiamiento_id == Model.tipo_financiamiento_id)
+                                    {
+                                        <option value="@tipo.tipo_financiamiento_id " selected>@tipo.descripcion</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@tipo.tipo_financiamiento_id">@tipo.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="position-relative border rounded p-3 mt-3" style="border-color: #6c757d; border-width: 1px; border-style: dashed;">
+                    <span class="position-absolute top-0 start-0 translate-middle-y bg-white px-2" style="font-weight: bold; color: #4a90e2;">
+                        <i class="material-icons me-2">login</i> AUDITORIA A LA CUENTA
+                    </span>
+                    <div class="row m-2 ms-2">
+                        <div class="col-sm-3 mb-3">
+                            <input type="hidden" id="AuditoriaCuentaCodigoEstadoHidden" value="@Model.auditoria_cuenta_codigo_estado">
+                            <label for="AuditoriaCuentaCodigoEstado" class="col-form-label">Auditoria Cuenta *</label>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="AuditoriaCuentaCorrecto" name="AuditoriaCuentaCodigoEstado" value="2" onchange="AbrirCuentaTriaje()">
+                                <label class="form-check-label" for="AuditoriaCuentaCorrecto">Aceptado</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="AuditoriaCuentaObservado" name="AuditoriaCuentaCodigoEstado" value="3" onchange="AbrirCuentaTriaje()">
+                                <label class="form-check-label" for="AuditoriaCuentaObservado">Observado</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9 mb-3" id="AuditoriaObservacionContainer" style="display: none;">
+                            <label for="AuditoriaCuentaObservacion" class="col-form-label">Observación *</label>
+                            <textarea class="form-control" id="AuditoriaCuentaObservacion" name="AuditoriaCuentaObservacion" maxlength="100" rows="3">@Html.Raw(Model.auditoria_cuenta_observacion)</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>       
+        <div class="row m-2">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" id="tabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="evaluaciones-tab" data-bs-toggle="tab" data-bs-target="#evaluaciones" type="button" role="tab" aria-controls="evaluaciones" aria-selected="true">Evaluaciones</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="diagnosticos-tab" data-bs-toggle="tab" data-bs-target="#diagnosticos" type="button" role="tab" aria-controls="diagnosticos" aria-selected="false">Diagnósticos</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="procedimientos-tab" data-bs-toggle="tab" data-bs-target="#procedimientos" type="button" role="tab" aria-controls="procedimientos" aria-selected="false">Procedimientos</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="medicamentos-tab" data-bs-toggle="tab" data-bs-target="#medicamentos" type="button" role="tab" aria-controls="medicamentos" aria-selected="false">Medicamentos</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <!-- Evaluaciones Tab -->
+                    <div class="tab-pane fade show active" id="evaluaciones" role="tabpanel" aria-labelledby="evaluaciones-tab">
+                        @* Tabla para Evaluaciones *@
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm" id="tablaEvaluaciones">
+                                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Fecha de Evaluación</th>
+                                        <th>Hora de Evaluación</th>
+                                        <th>Servicio</th>
+                                        <th>Estado de Auditoría</th>
+                                        <th>Observación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.evaluaciones_cuenta != null && Model.evaluaciones_cuenta.Any())
+                                    {
+                                        foreach (var evaluacion in Model.evaluaciones_cuenta)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@evaluacion.evaluacion_id</td>
+                                                <td class="text-center">@evaluacion.fecha_evaluacion?.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@evaluacion.hora_evaluacion</td>
+                                                <td class="text-center">@evaluacion.servicio_eess</td>
+                                                <td class="text-center">@evaluacion.auditoria_estado</td>
+                                                <td class="text-center">@evaluacion.auditoria_observacion</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5" class="text-center text-danger">No hay evaluaciones disponibles.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Diagnósticos Tab -->
+                    <div class="tab-pane fade" id="diagnosticos" role="tabpanel" aria-labelledby="diagnosticos-tab">
+                        @* Tabla para Diagnósticos *@
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm" id="tablaDiagnosticos">
+                                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Fecha de Evaluación</th>
+                                        <th>Hora de Evaluación</th>
+                                        <th>CIE10</th>
+                                        <th>Tipo</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Principal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.evaluaciones_cuenta_diagnosticos != null && Model.evaluaciones_cuenta_diagnosticos.Any())
+                                    {
+                                        foreach (var diagnostico in Model.evaluaciones_cuenta_diagnosticos)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@diagnostico.codigo_tipo_diagnostico</td>
+                                                <td class="text-center">@diagnostico.fecha_evaluacion?.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@diagnostico.hora_evaluacion</td>
+                                                <td class="text-center">@diagnostico.codigo_diagnostico</td>
+                                                <td class="text-center">@diagnostico.tipo_diagnostico</td>
+                                                <td class="text-center">@diagnostico.diagnostico</td>
+                                                @if (diagnostico.es_principal)
+                                                {
+                                                    <td>SI</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>NO</td>
+                                                }
+
+
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center text-danger">No hay diagnósticos disponibles.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Procedimientos Tab -->
+                    <div class="tab-pane fade" id="procedimientos" role="tabpanel" aria-labelledby="procedimientos-tab">
+                       @*  @{
+                            decimal totalPrecioProcedimientos = Model.evaluaciones_cuenta_procedimientos != null
+                            ? Model.evaluaciones_cuenta_procedimientos.Sum(p => p.precio)
+                            : 0;
+                        }
+                        <label id="totalPrecioProcedimientos" class="fw-bold">
+                            Importe total Procedimientos: @totalPrecioProcedimientos.ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("es-PE"))
+                        </label> *@
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm" id="tabProcedimientos">
+                                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Fecha de Evaluación</th>
+                                        <th>Hora de Evaluación</th>
+                                        <th>Servicio</th>
+                                        <th>Grupo</th>
+                                        <th>Código</th>
+                                        <th>Procedimiento</th>
+                                        <th>CIE10</th>
+                                        <th>Cantidad Prescrita</th>
+                                        <th>Cantidad Auditada</th>
+                                        <th>Cantidad Entregada</th>
+                                        @* <th>Precio</th> *@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.evaluaciones_cuenta_procedimientos != null && Model.evaluaciones_cuenta_procedimientos.Any())
+                                    {
+                                        foreach (var procedimiento in Model.evaluaciones_cuenta_procedimientos)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@procedimiento.evaluacion_procedimiento_id</td>
+                                                <td class="text-center">@procedimiento.fecha_evaluacion?.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@procedimiento.hora_evaluacion</td>
+                                                <td class="text-center">@procedimiento.servicio</td>
+                                                <td class="text-center">@procedimiento.grupo</td>
+                                                <td class="text-center">@procedimiento.codigo_procedimiento</td>
+                                                <td class="text-center">@procedimiento.procedimiento</td>
+                                                <td class="text-center">@procedimiento.codigo_diagnostico</td>
+                                                <td class="text-center">@procedimiento.cantidad_prescrita</td>
+                                                <td class="text-center">@procedimiento.auditoria_cantidad</td>
+                                                <td class="text-center">@procedimiento.cantidad_entregada</td>
+                                                @* <td>@procedimiento.precio.ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("es-PE"))</td> *@
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center text-danger">No hay procedimientos disponibles.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Medicamentos Tab -->
+                    <div class="tab-pane fade" id="medicamentos" role="tabpanel" aria-labelledby="medicamentos-tab">
+                        @* @{
+                            decimal totalPrecio = Model.evaluaciones_cuenta_medicamentos != null
+                            ? Model.evaluaciones_cuenta_medicamentos.Sum(m => m.precio)
+                            : 0;
+                        }
+                        <label id="totalPrecio" class="fw-bold">
+                            Importe total medicamentos: @totalPrecio.ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("es-PE"))
+                        </label> *@
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm" id="tablaMedicamentos">
+                                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Fecha de Evaluación</th>
+                                        <th class="text-center">Hora de Evaluación</th>
+                                        <th class="text-center">Codigo</th>
+                                        <th class="text-center">Medicamento</th>
+                                        <th class="text-center">Dosis</th>
+                                        <th class="text-center">Frecuencia</th>
+                                        <th class="text-center">CIE10</th>
+                                        <th class="text-center">Cantidad Prescrita</th>
+                                        <th class="text-center">Cantidad Auditada</th>
+                                        <th class="text-center">Cantidad Entregada</th>
+                                       @*  <th>Precio</th> *@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.evaluaciones_cuenta_medicamentos != null && Model.evaluaciones_cuenta_medicamentos.Any())
+                                    {
+                                        foreach (var medicamento in Model.evaluaciones_cuenta_medicamentos)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@medicamento.evaluacion_medicamento_id</td>
+                                                <td class="text-center">@medicamento.fecha_evaluacion?.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@medicamento.hora_evaluacion</td>
+                                                <td class="text-center">@medicamento.codigo_medicamento</td>
+                                                <td class="text-center">@medicamento.medicamento</td>
+                                                <td class="text-center">@medicamento.dosis</td>
+                                                <td class="text-center">@medicamento.frecuencia</td>
+                                                <td class="text-center">@medicamento.codigo_diagnostico</td>
+                                                <td class="text-center">@medicamento.cantidad_prescrita</td>
+                                                <td class="text-center">@medicamento.auditoria_cantidad</td>
+                                                <td class="text-center">@medicamento.cantidad_entregada</td>
+                                                @* <td>@medicamento.precio.ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("es-PE"))</td> *@
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="7" class="text-center text-danger">No hay medicamentos disponibles.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </dv>
+
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/cuenta.js?v=@DateTime.Now.Ticks"></script>

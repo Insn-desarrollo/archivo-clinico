@@ -1,0 +1,130 @@
+﻿<div id="form-busqueda" class="mt-4 w-100">
+    <form>      
+        <div class="mb-2">
+            <div class="row align-items-center w-100 form-control-text">
+                <div class="col-sm-3">
+                    <label for="estado" class="col-form-label label-form-family">Tipo de Servicio</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="status-icon">
+                            <i class="material-icons">category</i>
+                        </span>
+                        <select class="form-control" id="tipoServicio" name="tipoServicio">
+                            <option value="0">Todos</option>
+                            <option value="1">Consulta Externa</option>
+                            <option value="2">Emergencia</option>
+                            <option value="3">Hospitalización</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="fecha" class="col-form-label label-form-family d-flex align-items-center">
+                        <input type="checkbox" id="habilitarFecha" class="form-check-input me-2" onchange="toggleFecha()">
+                        Fecha de Evaluación
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="calendar-icon">
+                            <i class="material-icons">calendar_month</i>
+                        </span>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required disabled>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="historiaClinica" class="col-form-label label-form-family">Historia Clínica</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="history-icon">
+                            <i class="material-icons">description</i>
+                        </span>
+                        <input type="text" class="form-control" id="historiaClinica" name="historiaClinica" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="nroCuenta" class="col-form-label label-form-family">Número de Cuenta</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="account-icon">
+                            <i class="material-icons">account_balance</i>
+                        </span>
+                        <input type="text" class="form-control" id="nroCuenta" name="nroCuenta" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="documentoIdentidad" class="col-form-label label-form-family">Documento de Identidad</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="id-icon">
+                            <i class="material-icons">badge</i>
+                        </span>
+                        <input type="text" class="form-control" id="documentoIdentidad" name="documentoIdentidad" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="nombre" class="col-form-label label-form-family">Nombre del Paciente</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="name-icon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <input type="text" class="form-control" id="nombre" name="nombre">
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="estado" class="col-form-label label-form-family">Estado</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="status-icon">
+                            <i class="material-icons">check_circle</i>
+                        </span>
+                        <select class="form-control" id="estado" name="estado">
+                            <option value="0">Selecciona un estado</option>
+                            <option value="1">Pendiente</option>
+                            <option value="2">Aceptado</option>
+                            <option value="3">Observado</option>
+                            <option value="6">Aceptado | Recetas y Ordenes por enviar</option>
+                            <option value="7">Aceptado | Recetas y Ordenes enviadas</option>
+                            @* <option value="5">Subsanado</option> *@
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="usuario" class="col-form-label label-form-family">Usuario</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="user-icon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <select class="form-control" id="usuario" name="usuario">
+                            @foreach (var usuario in Model)
+                            {
+                                <option value="@usuario.Nombre">@usuario.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>         
+
+            <div class="row align-items-center justify-content-center w-100 form-control-text" style="margin-top: 10px;">
+                <div class="col-sm-3 d-flex justify-content-center">
+                    <div class="d-flex justify-content-between w-100 gap-2">
+                        <button type="button" class="btn btn-primary w-50 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="btnBuscarAtencionesGrid()">
+                            <i class="material-icons">supervised_user_circle</i>
+                            <span class="btn-text">Buscar</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary w-50 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="limpiarAtenciones()">
+                            <i class="material-icons">cleaning_services</i>
+                            <span class="btn-text">Limpiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alertMessage" class="alert alert-danger d-none mt-2" role="alert">
+                Por favor, complete todos los campos requeridos *.
+            </div>
+        </div>
+
+
+    </form>
+</div>

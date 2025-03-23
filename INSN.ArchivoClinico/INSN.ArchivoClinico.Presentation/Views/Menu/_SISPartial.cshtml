@@ -1,0 +1,62 @@
+﻿@* Vista Principal *@
+@{
+    Layout = "_Layout";
+}
+
+<div class="ordenes-content">
+    <div class="d-flex align-items-center">
+        <h3 class="me-3">Pacientes SIS</h3>
+        @* <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoServicio" id="todos" value="0" checked>
+                <label class="form-check-label" for="todos">Todos</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoServicio" id="consultaExterna" value="1">
+                <label class="form-check-label" for="consultaExterna">Consulta Externa</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoServicio" id="emergencia" value="2">
+                <label class="form-check-label" for="emergencia">Emergencia</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoServicio" id="hospitalizacion" value="3">
+                <label class="form-check-label" for="hospitalizacion">Hospitalización</label>
+            </div>
+        </div> *@
+    </div>
+
+    @Html.Partial("_FormSIS")
+    @Html.Partial("_TablaAteSIS")
+</div>
+
+<div id="modalDetalleCuenta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-banner text-white d-flex align-items-center py-2 px-3">
+                <h2 class="d-flex align-items-center">
+                    <i class="material-icons mr-2">personal_injury</i>&nbsp; Auditoría a la Cuenta
+                </h2>
+                <div class="d-flex justify-content-end align-items-center flex-nowrap">
+                    <div class="button-group d-flex flex-wrap">
+                        <button id="btnActualizar" class="btn btn-opciones-generales btn-outline-success d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" type="button" onclick="btnActualizarCuenta()">
+                            <i class="material-icons">autorenew</i>
+                            <span>Actualizar</span>
+                        </button>                       
+                      @*   <button id="btnFormatos" class="btn btn-opciones-generales btn-outline-secondary d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" type="button" onclick="btnFormatos()">
+                            <i class="material-icons">print</i>
+                            <span>Formatos</span>
+                        </button> *@
+                        <button id="btnSalir" class="btn btn-opciones-generales btn-outline-danger d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" data-bs-dismiss="modal">
+                            <i class="material-icons">exit_to_app</i>
+                            <span>Salir</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" style="overflow: auto; max-height: calc(100vh - 50px);">
+                <iframe id="iframeDetalleCuenta" src="" style="width: 100%; height: 98%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

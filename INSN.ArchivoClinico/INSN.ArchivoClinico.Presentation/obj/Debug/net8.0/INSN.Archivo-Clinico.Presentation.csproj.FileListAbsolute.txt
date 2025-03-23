@@ -1,0 +1,9 @@
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.csproj.AssemblyReference.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.GeneratedMSBuildEditorConfig.editorconfig
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.AssemblyInfoInputs.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.AssemblyInfo.cs
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.csproj.CoreCompileInputs.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.MvcApplicationPartsAssemblyInfo.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.RazorAssemblyInfo.cache
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.RazorAssemblyInfo.cs
+H:\INSNB\archivo-clinico\INSN.Archivo-Clinico\INSN.Archivo-Clinico.Presentation\obj\Debug\net8.0\INSN.Archivo-Clinico.Presentation.sourcelink.json

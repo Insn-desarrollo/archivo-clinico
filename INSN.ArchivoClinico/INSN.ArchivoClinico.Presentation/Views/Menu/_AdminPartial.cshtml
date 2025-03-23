@@ -1,0 +1,45 @@
+﻿@* Vista Principal *@
+@{
+    Layout = "_Layout";
+}
+
+<div class="ordenes-content">
+    <div class="d-flex align-items-center">
+        <h3 class="me-3">Administrar Asignación</h3>            
+    </div>
+    @Html.Partial("_FormAdmin")
+    @Html.Partial("_TablaAteAdmin")
+</div>
+
+<div id="modalDetalleTriaje" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-banner text-white d-flex align-items-center py-2 px-3">
+                <h2 class="d-flex align-items-center">
+                    <i class="material-icons mr-2">personal_injury</i>&nbsp; Auditoría al triaje
+                </h2>
+                <div class="d-flex justify-content-end align-items-center flex-nowrap">
+                    <div class="button-group d-flex flex-wrap">
+                        <button id="btnActualizar" class="btn btn-opciones-generales btn-outline-success d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" type="button" onclick="btnActualizarTriaje()">
+                            <i class="material-icons">save</i>
+                            <span>Guardar</span>
+                        </button>
+                        <button id="btnConsultas" class="btn btn-opciones-generales btn-outline-info d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" type="button" onclick="AbrirModalSIS()">
+                            <i class="material-icons">folder</i>
+                            <span>Afiliado SIS</span>
+                        </button>
+                        <button id="btnSalir" class="btn btn-opciones-generales btn-outline-danger d-flex flex-column align-items-center mx-1 mb-1 responsive-btn" data-bs-dismiss="modal">
+                            <i class="material-icons">exit_to_app</i>
+                            <span>Salir</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" style="overflow: auto; max-height: calc(100vh - 50px);">
+                <iframe id="iframeDetalleTriaje" src="" style="width: 100%; height: 98%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+

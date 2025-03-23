@@ -1,0 +1,49 @@
+﻿@* _TablaAtenciones.cshtml *@
+<div id="loadingOverlay" class="d-none position-fixed top-0 start-0 w-100 h-100 bg-light bg-opacity-75 text-center" style="z-index: 1050;">
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando resultados...</p>
+    </div>
+</div>
+
+<div class="mb-2">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
+                    <tr>
+                        <th rowspan="2">Nro Atenc.</th>
+                        <th rowspan="2">Tipo de Servicio</th>
+                        <th rowspan="2">Fecha Ingreso</th>
+                        <th rowspan="2">Historia Clinica</th>
+                        <th rowspan="2">Cuenta Atencion</th>
+                        <th rowspan="2">Documento de Identidad</th>
+                        <th rowspan="2">Paciente</th>
+                        <th rowspan="2">Fecha Nacimiento</th>
+                        <th rowspan="2">Servicio Ingreso</th> 
+                        <th rowspan="2">Auditor</th>
+                        <th colspan="4">FUA</th> 
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Estado FUA</th>
+                        <th rowspan="2">Mensaje</th>
+                        <th rowspan="2">Observaciones</th>                        
+                        <th rowspan="2">Acción</th>
+                    </tr>
+                </thead>
+                <tbody style="font-family: 'Open Sans', sans-serif;">
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="MensajeNoResultados" class="alert alert-info" style="display:none;">
+            No se encontraron resultados.
+        </div>
+    </div>
+</div>
+
+<!-- Controles de paginación -->
+@Html.Partial("_PaginationPartial")

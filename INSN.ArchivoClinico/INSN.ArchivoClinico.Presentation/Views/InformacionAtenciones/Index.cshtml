@@ -1,0 +1,147 @@
+﻿@model IEnumerable<INSN.ArchivoClinico.Application.DTOs.AtencionesInformacionPaginadoCEDTO>
+
+@{
+    ViewData["Title"] = "Listado de Atenciones";
+}
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f0f4f8;
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .container-fluid {
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        margin-top: 0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 1rem;
+        }
+
+        .table thead th {
+            background-color: #84a9ac;
+            color: #fefefe;
+            border: none;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #e7eff6;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #cfd8e3;
+        }
+
+        .table th.paciente, .table td.paciente {
+            width: 25%;
+        }
+
+        .table th.medico, .table td.medico {
+            width: 20%;
+        }
+
+    .badge {
+        font-size: 1em;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+
+    .estado-pendiente {
+        color: #333;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+    }
+
+    .estado-aprobado {
+        color: #155724;
+        background-color: #d4edda;
+    }
+
+    .estado-observado {
+        color: #721c24;
+        background-color: #f8d7da;
+    }
+
+    .estado-proceso {
+        color: #856404;
+        background-color: #fff3cd;
+    }
+
+    .fas {
+        font-size: 1.1rem;
+    }
+</style>
+
+<div class="container-fluid">
+    <h2 class="text-center">Listado de Atenciones</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th><i class="fas fa-id-badge"></i> Nº Atención</th>
+                <th><i class="fas fa-file-medical"></i> Nro Cuenta</th>
+                <th><i class="fas fa-file-medical"></i> Historia Clinica </th>              
+                <th class="paciente"><i class="fas fa-user"></i> Paciente</th>
+                <th><i class="fas fa-calendar-alt"></i> Fecha Registro</th>
+                <th><i class="fas fa-hospital"></i> Servicio</th>
+                <th class="medico"><i class="fas fa-user-md"></i> Médico</th>
+                <th><i class="fas fa-traffic-light"></i> Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AtencionId </td>
+                    <td>@item.CuentaAtencionId</td>
+                    <td>@item.HistoriaClinica </td>
+                    <td class="paciente">@item.ApellidoPaterno @item.ApellidoMaterno, @item.PrimerNombre @item.SegundoNombre</td>
+                    <td>@item.FechaIngreso?.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>@item.ServicioIngreso </td>
+                    <td class="medico">@item.ProfesionalNombre </td>
+                    <td>
+                        @if (item.AuditoriaCodigoEstado == 1)
+                        {
+                            <span class="badge estado-pendiente">Pendiente</span>
+                        }
+                        else if (item.AuditoriaCodigoEstado == 2)
+                        {
+                            <span class="badge estado-aprobado">Aprobado</span>
+                        }
+                        else if (item.AuditoriaCodigoEstado == 3)
+                        {
+                            <span class="badge estado-observado">Observado</span>
+                        }
+                        else if (item.AuditoriaCodigoEstado == 4)
+                        {
+                            <span class="badge estado-proceso">En Proceso</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

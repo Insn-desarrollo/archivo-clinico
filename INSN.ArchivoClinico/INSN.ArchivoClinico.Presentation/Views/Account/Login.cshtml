@@ -1,0 +1,52 @@
+﻿@model INSN.ArchivoClinico.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/login.css" rel="stylesheet" />
+
+<div class="full-background">
+    <div class="login-wrapper">
+        <div class="audit-login-container text-center">
+            <h3 class="instituto-nombre">Instituto Nacional de Salud del Niño</h3>
+            <div class="audit-icon mx-auto">
+                @* <i class="material-icons">health_and_safety</i> *@
+                <i class="material-icons" style="font-size: 3rem;">medical_services</i>
+            </div>
+            <h2 class="audit-login-title">ARCHIVO CLÍNICO</h2>
+            <form asp-action="Login" method="post">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                <div class="input-group audit-login-input mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons">person</i></span> 
+                    </div>
+                    <input asp-for="Usuario" class="form-control" placeholder="Usuario" />
+                </div>
+                <div class="input-group audit-login-input mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons">lock</i></span> 
+                    </div>
+                    <input asp-for="Clave" class="form-control" type="password" placeholder="Clave" />
+                </div>
+                <button type="submit" class="btn btn-audit-login">
+                    <i class="material-icons">login</i> Iniciar sesión
+                </button>
+            </form>           
+@* 
+            <footer class="footer text-muted">
+                <div class="container-fluid text-center">
+                    &copy; 2024 - INSN.ArchivoClinico - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+            </footer> *@
+        </div>
+    </div>
+</div>
+
+
