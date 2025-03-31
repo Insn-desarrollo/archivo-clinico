@@ -12,13 +12,7 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
         public EvaluacionService(IEvaluacionRepository evaluacionRepository)
         {
             _evaluacionRepository = evaluacionRepository;
-        }
-
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarOrdenesAsync(AtencionFiltro filtro)
-        {
-            var atenciones = await _evaluacionRepository.ConsultarOrdenesAsync(filtro);
-            return atenciones;
-        }     
+        } 
 
         public async Task<List<EvaluacionMinDto>> ObtenerEvaluacionesPorAtencionAsync(int atencionId)
         {

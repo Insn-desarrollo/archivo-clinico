@@ -22,7 +22,7 @@ namespace INSN.ArchivoClinico.Controllers
     public class MenuController : Controller
     {
         private readonly ILogger<MenuController> _logger;
-        private readonly IAtencionService _atencionAppService;
+        private readonly IHistoriasService _atencionAppService;
         private readonly IEvaluacionService _evaluacionAppService;        
         private readonly ICuentaService _cuentaAppService;
         private readonly HttpClient _httpClient;
@@ -31,7 +31,7 @@ namespace INSN.ArchivoClinico.Controllers
 
 
         public MenuController(ILogger<MenuController> logger,
-            IAtencionService atencionAppService,
+            IHistoriasService atencionAppService,
             ICuentaService cuentaAppService,
             IEvaluacionService evaluacionAppService,
             HttpClient httpClient, 
@@ -90,7 +90,7 @@ namespace INSN.ArchivoClinico.Controllers
                 new UsuarioAdmin { Usuario = "Por asignar", Nombre = "Por asignar" } 
             };
 
-            var lUsuariosDto = await _atencionAppService.ObtenerListaAuditoresAsync();
+            var lUsuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
             var lUsuarioFilterDto = lUsuariosDto.Where(x => x.Cargo.Equals(1));
             foreach (var item in lUsuarioFilterDto)
             {
@@ -99,8 +99,8 @@ namespace INSN.ArchivoClinico.Controllers
 
             switch (vista)
             {
-                case "AuditoriaTriaje":
-                    return PartialView("_TriajePartial", listaUsuarios);
+                case "HistoriasClinicas":
+                    return PartialView("_HistoriasPartial", listaUsuarios);
                 case "AuditoriaOrdenes":
                     return PartialView("_OrdenesPartial", listaUsuarios);
                 case "AuditoriaCuentas":
@@ -129,22 +129,26 @@ namespace INSN.ArchivoClinico.Controllers
                 ViewBag.NombreUsuario = HttpContext.Session.GetString("Usuario");
                 var usuario = GetUsuario();
 
-                var usuariosDto = await _atencionAppService.ObtenerListaAuditoresAsync();
-                var contadores = await _atencionAppService.ObtenerContadoresBandejaAsync();
-                var contador = contadores.FirstOrDefault();
+                var usuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
+                //var contadores = await _atencionAppService.ObtenerContadoresBandejaAsync();
+                //var contador = contadores.FirstOrDefault();
 
                 var usuarioCargo = usuariosDto.Where(x => x.Usuario.Equals(usuario));
 
-                // Lista tipada para mayor claridad y seguridad
                 var menus = new List<dynamic>();
+                if (usuarioCargo.Any())
+                {
+                    menus.Add(new { Flag = "hisClinicas", Icon = "assignment", Text = "Historias Clínicas", Vista = "HistoriasClinicas", Badge = 2 });
+                    menus.Add(new { Flag = "regPrestamos", Icon = "account_balance", Text = "Registro de préstamos", Vista = "RegistroPrestamos", Badge = 1 });
+                }
 
+                // Lista tipada para mayor claridad y seguridad
+                
                 //if (usuarioCargo.Any(x => x.Cargo == 2))
                 //{
                 //    menus.Add(new { Flag = "admin", Icon = "admin_panel_settings", Text = "Administrar Atenciones", Vista = "AuditoriaAdmin", Badge = contador?.cantidad_por_asignar });
                 //}
-
-                menus.Add(new { Flag = "hisClinicas", Icon = "assignment", Text = "Historias Clínicas", Vista = "HistoriasClinicas", Badge = 2 });
-                menus.Add(new { Flag = "regPrestamos", Icon = "account_balance", Text = "Registro de préstamos", Vista = "RegistroPrestamos", Badge = 1 });
+                //
                 //menus.Add(new { Flag = "ordenes", Icon = "fact_check", Text = "Ordenes en Linea", Vista = "AuditoriaOrdenes", Badge = contador?.cantidad_evaluaciones_pendiente });
                 //menus.Add(new { Flag = "cuentas", Icon = "account_balance", Text = "Auditoría Cuenta", Vista = "AuditoriaCuentas", Badge = contador?.cantidad_cuentas_pendientes });
                 //menus.Add(new { Flag = "sis", Icon = "assignment_ind", Text = "SIS - Atenciones", Vista = "AuditoriaFUA", Badge = contador?.cantidad_sis_pendientes });
@@ -166,7 +170,7 @@ namespace INSN.ArchivoClinico.Controllers
         }
 
          
-        public async Task<IActionResult> AuditoriaTriaje([FromQuery] AtencionFiltro filtro)
+        public async Task<IActionResult> HistoriasClinicas([FromQuery] HistoriaFiltro filtro)
         {
             try
             {
@@ -180,9 +184,7 @@ namespace INSN.ArchivoClinico.Controllers
             try
             {
 
-                if (filtro.Usuario == "Todos")
-                    filtro.Usuario = "";
-                var paginatedResponse = await _atencionAppService.ConsultarTriajesAsync(filtro);
+                var paginatedResponse = await _atencionAppService.ConsultarHistoriasAsync(filtro);
                 if (paginatedResponse != null)
                 {
                     var result = new
@@ -199,7 +201,7 @@ namespace INSN.ArchivoClinico.Controllers
                 }
                 else
                 {
-                    return Json(new { pacientes = new List<Domain.Entities.AtencionConsultaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
+                    return Json(new { pacientes = new List<Domain.Entities.HistoriaClinicaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
                 }
             }
             catch (Exception ex)
@@ -207,164 +209,7 @@ namespace INSN.ArchivoClinico.Controllers
                 ViewBag.Error = $"Ocurrió un error al llamar servicio AuditoriaTriaje: {ex.Message}";
                 return StatusCode(500, "Error interno del servidor");
             }
-        }
-
-         
-        public async Task<IActionResult> AuditoriaOrdenes([FromQuery] AtencionFiltro filtro)
-        {
-            try
-            {
-                if (filtro.Usuario == "Todos")
-                    filtro.Usuario = "";
-
-                var paginatedResponse = await _evaluacionAppService.ConsultarOrdenesAsync(filtro);
-                if (paginatedResponse != null)
-                {
-                    var result = new
-                    {
-                        pacientes = paginatedResponse,
-                        paginacion = new
-                        {
-                            currentPage = filtro.Page, 
-                            totalPages = paginatedResponse?.FirstOrDefault()?.total_pages,
-                            totalRecords = paginatedResponse?.FirstOrDefault()?.total_records
-                        }
-                    };
-                    return Json(result);
-                }
-                else
-                {
-                    return Json(new { pacientes = new List<Domain.Entities.AtencionConsultaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = $"Ocurrió un error al llamar servicio AuditoriaOrdenes: {ex.Message}";
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
-
-        public async Task<IActionResult> AuditoriaCuentas([FromQuery] AtencionFiltro filtro)
-        {
-            try
-            {
- 
-
-                if (filtro.Usuario == "Todos")
-                    filtro.Usuario = "";
-                var paginatedResponse = await _cuentaAppService.ConsultarCuentasAsync(filtro);
-                if (paginatedResponse != null)
-                {
-                    var result = new
-                    {
-                        pacientes = paginatedResponse,
-                        paginacion = new
-                        {
-                            currentPage = filtro.Page,
-                            totalPages = paginatedResponse?.FirstOrDefault()?.total_pages,
-                            totalRecords = paginatedResponse?.FirstOrDefault()?.total_records
-                        }
-                    };
-                    return Json(result);
-                }
-                else
-                {
-                    return Json(new { pacientes = new List<Domain.Entities.AtencionConsultaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al llamar al servicio de AtencionHce.");
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
-
-        public async Task<IActionResult> AuditoriaFUA([FromQuery] AtencionFiltro filtro)
-        {
-            try
-            {
-                var token = GetAuthToken();
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            try
-            {
-
-                if (filtro.Usuario == "Todos")
-                    filtro.Usuario = "";
-                var paginatedResponse = await _cuentaAppService.ConsultarSISAsync(filtro);
-                if (paginatedResponse != null)
-                {
-                    var result = new
-                    {
-                        pacientes = paginatedResponse,
-                        paginacion = new
-                        {
-                            currentPage = filtro.Page,
-                            totalPages = paginatedResponse?.FirstOrDefault()?.total_pages,
-                            totalRecords = paginatedResponse?.FirstOrDefault()?.total_records
-                        }
-                    };
-                    return Json(result);
-                }
-                else
-                {
-                    return Json(new { pacientes = new List<Domain.Entities.AtencionConsultaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al llamar al servicio de AtencionHce.");
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
-
-        public async Task<IActionResult> AuditoriaAdmin([FromQuery] AtencionFiltro filtro)
-        {
-            try
-            {
-                var token = GetAuthToken();
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            try
-            {
-
-                if (filtro.Usuario == "Todos")
-                    filtro.Usuario = "";
-                                
-                var paginatedResponse = await _atencionAppService.ConsultarAdminAsync(filtro);
-                if (paginatedResponse != null)
-                {
-                    var result = new
-                    {
-                        pacientes = paginatedResponse,
-                        paginacion = new
-                        {
-                            currentPage = filtro.Page,
-                            totalPages = paginatedResponse?.FirstOrDefault()?.total_pages,
-                            totalRecords = paginatedResponse?.FirstOrDefault()?.total_records
-                        }
-                    };
-                    return Json(result);
-                }
-                else
-                {
-                    return Json(new { pacientes = new List<Domain.Entities.AtencionConsultaDto>(), paginacion = new { currentPage = 1, totalPages = 1 } });
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = $"Ocurrió un error al llamar servicio AuditoriaTriaje: {ex.Message}";
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
+        }       
 
 
         private string GetUsuario()

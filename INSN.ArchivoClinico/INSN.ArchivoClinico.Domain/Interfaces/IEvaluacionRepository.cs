@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace INSN.ArchivoClinico.Domain.Interfaces
 {
     public interface IEvaluacionRepository
-    {      
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarOrdenesAsync(AtencionFiltro filtro);       
+    {          
         Task<List<EvaluacionMinDto>> ObtenerEvaluacionesPorAtencionAsync(long atencionId);   
         Task<bool> ActualizarAuditoriaAsync(ActualizarAuditoriaRequest request);
         Task<bool> AceptacionMasivaItemsEvaluacion(AceptarMasivaEvaluacionRequest request);

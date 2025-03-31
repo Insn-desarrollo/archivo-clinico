@@ -1,17 +1,11 @@
 ﻿namespace INSN.ArchivoClinico.Domain.Models;
 
-public class AtencionFiltro
+public class HistoriaFiltro
 {
-    public string? ModuloAuditoria { get; set; }
-    public int? TipoServicio { get; set; }
-    public DateTime? Fecha { get; set; }
     public string? HistoriaClinica { get; set; }
-    public string? NroCuenta { get; set; }
     public string? DocumentoIdentidad { get; set; }
     public string? Nombre { get; set; }
-    public int? CodigoEstado { get; set; } = 0;
-    public string? Usuario { get; set; }
-    public bool? HabilitarFecha { get; set; } = false; 
+    public int? CodigoEstado { get; set; } = 0;   
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 5;
     public int? Asignado { get; set; } = 0;

@@ -1,4 +1,4 @@
-﻿var despliegue = "/apwAuditoria";
+﻿var despliegue = "/apwArchivoClinico";
 
 function permitirSoloNumeros(event) {
     event.target.value = event.target.value.replace(/[^0-9]/g, ''); 
@@ -13,15 +13,15 @@ const documentTypes = {
     "8": { "label": "Cédula de identidad", "length": 10 }
 };
 
-var desplieguePost = "/apwAuditoria";
-var moduloAuditoria = "AuditoriaTriaje"; 
+var desplieguePost = "/apwArchivoClinico";
+var moduloHistoriaClinicas = "HistoriaClinicas"; 
 
 var hoy = new Date();
 var dia = String(hoy.getDate()).padStart(2, '0');
 var mes = String(hoy.getMonth() + 1).padStart(2, '0'); 
 var año = hoy.getFullYear();
 
-var paginadoTriaje = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
+var paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
 var paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
 var paginadoCuenta = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
 var paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
@@ -48,8 +48,8 @@ function toggleFecha() {
 
 function cargarVista(vista) {
     switch (vista) {
-        case 'AuditoriaTriaje':
-            paginadoTriaje = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };           
+        case 'HistoriasClinicas':
+            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };           
             break;
         case 'AuditoriaOrdenes':
             paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
@@ -61,7 +61,7 @@ function cargarVista(vista) {
             paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
             break;
         default:
-            paginadoTriaje = { "currentPage": 1, "totalPages": 1, "pageSize": 8 }; 
+            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 }; 
             break;
     }
 
@@ -69,7 +69,7 @@ function cargarVista(vista) {
         .then(response => response.text())
         .then(html => {
             document.getElementById('contenido').innerHTML = html;
-            document.getElementById("fecha").value = `${año}-${mes}-${dia}`;
+            /*document.getElementById("fecha").value = `${año}-${mes}-${dia}`;*/
             buscarAtenciones();
         })
         .catch(error => console.error('Error al cargar la vista:', error));
@@ -96,55 +96,36 @@ async function buscarAtenciones(event) {
 
         document.getElementById("loadingOverlay").classList.remove("d-none");
         var habilitarFecha = false;
-
-        if (moduloAuditoria != "AuditoriaAdmin") {           
-            const checkbox = document.getElementById('habilitarFecha');
-            habilitarFecha = checkbox.checked ? true : false;   
-        }
-        
-        if (!document.getElementById("fecha").value) {
-            document.getElementById("alertMessage").classList.remove("d-none");
-            return;
-        } else {
-            document.getElementById("alertMessage").classList.add("d-none");
-        }
+       
+        //if (!document.getElementById("fecha").value) {
+        //    document.getElementById("alertMessage").classList.remove("d-none");
+        //    return;
+        //} else {
+        //    document.getElementById("alertMessage").classList.add("d-none");
+        //}
 
         var _currentPage = 1;
         var _pageSize = 1;
         switch (this.moduloAuditoria) {
-            case 'AuditoriaTriaje':
-                _currentPage = paginadoTriaje.currentPage;
-                _pageSize = paginadoTriaje.pageSize;
+            case 'HistoriaClinicas':
+                _currentPage = paginadoHistoria.currentPage;
+                _pageSize = paginadoHistoria.pageSize;
                 break;
             case 'AuditoriaOrdenes':
                 _currentPage = paginadoOrden.currentPage;
                 _pageSize = paginadoOrden.pageSize;
-                break;
-            case 'AuditoriaCuentas':
-                _currentPage = paginadoCuenta.currentPage;
-                _pageSize = paginadoCuenta.pageSize;
-                break;
-            case 'AuditoriaFUA':
-                _currentPage = paginadoSis.currentPage;
-                _pageSize = paginadoSis.pageSize;
-                break;
+                break;           
             default:
-                _currentPage = paginadoTriaje.currentPage;
-                _pageSize = paginadoTriaje.pageSize;
+                _currentPage = paginadoHistoria.currentPage;
+                _pageSize = paginadoHistoria.pageSize;
                 break;
         }
         
         const parametros = {
-            ModuloAuditoria: moduloAuditoria,
-            tipoServicio: document.getElementById("tipoServicio").value,
-            fecha: document.getElementById("fecha").value,
             historiaClinica: document.getElementById("historiaClinica").value,
-            nroCuenta: document.getElementById("nroCuenta").value,
             documentoIdentidad: document.getElementById("documentoIdentidad").value,
             nombre: document.getElementById("nombre").value,
             codigoEstado: document.getElementById("estado").value,
-            usuario: document.getElementById("usuario").value,
-            habilitarFecha: habilitarFecha,
             page: _currentPage,
             pageSize: _pageSize
         };
@@ -280,22 +261,6 @@ function mostrarModal(idModal, mensaje, tiempo = 3000) {
     });
 }
 
-//function mostrarModal(idModal, mensaje, tiempo = 4000) {
-//    const modal = document.getElementById(idModal);
-//    if (modal) {
-//        const modalBody = modal.querySelector(".modal-body p");
-//        modalBody.innerHTML = mensaje;
-//        const bootstrapModal = new bootstrap.Modal(modal);
-//        bootstrapModal.show();
-
-//        setTimeout(() => {
-//            bootstrapModal.hide();
-//        }, tiempo);
-//    } else {
-//        console.error(`Modal con ID "${idModal}" no encontrado.`);
-//    }
-//}
-
 async function limpiarAtenciones() {
     try {
         document.getElementById("loadingOverlay").classList.remove("d-none");
@@ -318,7 +283,7 @@ async function limpiarAtenciones() {
         document.getElementById("tipoServicio").value = 0
 
         const parametros = {
-            ModuloAuditoria: moduloAuditoria,
+            ModuloArchivoClinico: moduloHistoriaClinicas,
             tipoServicio: 0,
             fecha: fecha,
             historiaClinica: '',
@@ -357,38 +322,37 @@ function updateTable(data) {
 
     const fragment = document.createDocumentFragment();
 
-    data.forEach(atencion => {
+    data.forEach(historia => {
         const row = document.createElement('tr');
 
-        // 🔹 Definir iconos y colores
-        let iconColor = "#0a58ca", borderColor = "#0a58ca", icon = "3p";
+        var iconColor = "#0a58ca", borderColor = "#0a58ca", icon = "3p";
 
-        if (moduloAuditoria !== 'AuditoriaTriaje') {
-            if (atencion.auditoriaCodigoEstado === 3) {
+        if (moduloHistoriaClinicas !== 'AuditoriaTriaje') {
+            if (historia.auditoriaCodigoEstado === 3) {
                 iconColor = "red";
                 borderColor = "red";
                 icon = "warning";
-            } else if (atencion.auditoriaCodigoEstado === 0 || atencion.auditoriaCodigoEstado === 1) {
+            } else if (historia.auditoriaCodigoEstado === 0 || historia.auditoriaCodigoEstado === 1) {
                 iconColor = "#606060";
                 borderColor = "#606060";
             }
         }
 
-        const styleCampoCuenta = atencion.cuenta_atencion_id ? "campo-verde" : "campo-grilla";
+        const styleCampoCuenta = historia.cuenta_atencion_id ? "campo-verde" : "campo-grilla";
         let btnsAccion = '';
 
-        if (moduloAuditoria == 'AuditoriaOrdenes' || moduloAuditoria == 'AuditoriaCuentas') {
-            let textFuente = '', btnFuente = 'btn-secondary', textEstado = atencion.auditoria_estado;
+        if (moduloHistoriaClinicas == 'AuditoriaOrdenes' || moduloHistoriaClinicas == 'AuditoriaCuentas') {
+            let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.auditoria_estado;
             let tituloBtn = 'Actualizar Auditoría';
 
-            if (atencion.auditoria_codigo_estado === 2) {
+            if (historia.auditoria_codigo_estado === 2) {
                 btnFuente = 'btn-primary'
                 textFuente = 'text-primary';
-            } else if (atencion.auditoria_codigo_estado === 3) {
+            } else if (historia.auditoria_codigo_estado === 3) {
                 textFuente = 'text-danger';
                 btnFuente = 'btn-danger'
                 tituloBtn = 'Subsanar Observación';
-                if (atencion.auditoria_triaje_subsana_obs) {
+                if (historia.auditoria_triaje_subsana_obs) {
                     textFuente = 'text-success';
                     textEstado = 'Subsanado';
                     btnFuente = 'btn-success';
@@ -396,12 +360,12 @@ function updateTable(data) {
                 }
             }
 
-            if (atencion.auditoria_codigo_estado !== 3) {
+            if (historia.auditoria_codigo_estado !== 3) {
                 btnsAccion = `
                 <td class="text-center">
                     <div class="d-flex justify-content-between w-100 gap-2">
                         <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${atencion.atencion_id_eess}', '${moduloAuditoria}')"
+                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
                             data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Auditoría">
                             <i class="material-icons">edit</i>
                         </button>
@@ -412,62 +376,13 @@ function updateTable(data) {
                 <td class="text-center">
                     <div class="d-flex justify-content-between w-100 gap-2">
                         <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${atencion.atencion_id_eess}', '${moduloAuditoria}')"
+                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
                             data-bs-toggle="tooltip" data-bs-placement="top" title="Subsanar Observación">
                             <i class="material-icons">edit_note</i>
                         </button>
                     </div>
                 </td>`;
-            }
-        } else if (moduloAuditoria == 'AuditoriaFUA') {
-            if (atencion.fua_lote == '') {
-                btnsAccion = `
-                <td class="text-center">
-                    <div class="d-flex justify-content-between w-50 gap-2">
-                        <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="emitirFua('${atencion.atencion_id_eess}')"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="Emitir Fua">
-                            <i class="material-icons">send</i>
-                        </button>
-                    </div>
-                </td>`;
-            }
-            else {
-                if (atencion.fua_guid == '' || atencion.fua_guid == null || atencion.fua_estado == 'E') {
-                    btnsAccion = `
-                    <td class="text-center">
-                        <div class="d-flex justify-content-between w-100 gap-2">
-                            <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                                onclick="emitirFua('${atencion.atencion_id_eess}')"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Emitir Fua">
-                                <i class="material-icons">send</i>
-                            </button>
-                            <button type="button" class="btn btn-info w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                                    onclick="abrirDetalleConSwal('${atencion.atencion_id_eess}')"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Previsualizar FUA">
-                                <i class="material-icons">preview</i>
-                            </button>
-                        </div>
-                    </td>`;      
-                } else {
-                    btnsAccion = `
-                    <td class="text-center">
-                        <div class="d-flex justify-content-between w-100 gap-2">
-                            <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                                onclick="consultarFua('${atencion.atencion_id_eess}', '${atencion.fua_guid}')"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Consultar Fua">
-                                <i class="material-icons">search</i>
-                            </button>
-                            <button type="button" class="btn btn-info w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                                    onclick="abrirDetalleConSwal('${atencion.atencion_id_eess}')"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Previsualizar FUA">
-                                <i class="material-icons">preview</i>
-                            </button>
-                        </div>
-                    </td>`;     
-                }
-                   
-            }
+            }       
                 
         } else {
             btnsAccion = ``;
@@ -475,76 +390,37 @@ function updateTable(data) {
 
 
         let extraColumns = '';
-        switch (moduloAuditoria) {
+        switch (moduloHistoriaClinicas) {
             case "AuditoriaCuentas":
                 extraColumns = `
-                    <td class="small campo-grilla">${atencion.fuente_financiamiento ?? ""}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_estado}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_usuario ?? ""}</td>`;       
+                    <td class="small campo-grilla">${historia.fuente_financiamiento ?? ""}</td>
+                    <td class="small campo-grilla">${historia.auditoria_estado}</td>
+                    <td class="small campo-grilla">${historia.auditoria_usuario ?? ""}</td>`;       
                 break;
 
-            case "AuditoriaFUA":
-                var fuaEstadoTexto;
-                switch (atencion.fua_estado) {
-                    case 'R':
-                        fuaEstadoTexto = 'Registrado';
-                        break;
-                    case 'P':
-                        fuaEstadoTexto = 'Procesado';
-                        break;
-                    case 'F':
-                        fuaEstadoTexto = 'Finalizado';
-                        break;
-                    case 'E':
-                        fuaEstadoTexto = 'Error';
-                        break;
-                    default:
-                        fuaEstadoTexto = atencion.fua_estado; 
-                }
+            case "HistoriaClinicas":
+                let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.estado_historia;
+                let tituloBtn = 'Actualizar Historia';
 
-                extraColumns = `
-                    <td class="small campo-grilla">${atencion.auditoria_usuario}</td> 
-                    <td class="small campo-grilla">${fuaEstadoTexto}</td>                     
-                    <td class="small campo-grilla">${atencion.fua_mensaje ?? ""}</td>
-                    <td class="small campo-grilla">${atencion.fua_advertencia ?? ""}</td>`;
-                break;
-
-            case "AuditoriaAdmin":
-                extraColumns = `
-                    <td class="small campo-grilla">${atencion.fuente_financiamiento ?? ""}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_estado}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_usuario ?? ""}</td>`;
-                break;
-
-            case "AuditoriaTriaje":
-                let textFuente = '', btnFuente = 'btn-secondary', textEstado = atencion.auditoria_triaje_estado;
-                let tituloBtn = 'Actualizar Auditoría';
-
-                if (atencion.auditoria_triaje_codigo_estado === 2) {
+                if (historia.codigo_estado_historia === 2) {
                     btnFuente = 'btn-primary'
                     textFuente = 'text-primary';
-                } else if (atencion.auditoria_triaje_codigo_estado === 3) {
+                } else if (historia.codigo_estado_historia === 3) {
                     textFuente = 'text-danger';
                     btnFuente = 'btn-danger'
                     tituloBtn = 'Subsanar Observación';
-                    if (atencion.auditoria_triaje_subsana_obs) {
-                        textFuente = 'text-success';
-                        textEstado = 'Subsanado';
-                        btnFuente = 'btn-success';
-                        tituloBtn = 'Actualizar Subsanación';
-                    }
                 }
 
                 extraColumns = `
-                    <td class="small campo-grilla">${atencion.fuente_financiamiento ?? ""}</td>
-                    <td class="small campo-grilla ${textFuente}">${textEstado}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_usuario ?? ""}</td>`;                
+                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
+                    <td class="small campo-grilla">${historia.correo ?? ""}</td>
+                    <td class="small campo-grilla ${textFuente}">${textEstado}</td>`;                
 
                 btnsAccion = `
                 <td class="text-center">
                     <div class="d-flex justify-content-between w-100 gap-2">
                         <button type="button" class="btn ${btnFuente} w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${atencion.atencion_id_eess}', '${moduloAuditoria}')"
+                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
                             data-bs-toggle="tooltip" data-bs-placement="top" title="${tituloBtn}">
                             <i class="material-icons">edit</i>
                         </button>
@@ -556,24 +432,20 @@ function updateTable(data) {
             default: // Orden
 
                 extraColumns = `
-                    <td class="small campo-grilla">${atencion.fuente_financiamiento ?? ""}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_estado}</td>
-                    <td class="small campo-grilla">${atencion.auditoria_usuario ?? ""}</td>`;       
+                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
+                    <td class="small campo-grilla">${historia.correo}</td>`;       
                 break;
         }
 
         row.innerHTML = `
-            <td class="small campo-grilla">${atencion.atencion_id_eess}</td>
-            <td class="small campo-grilla">${atencion.tipo_servicio}</td>
-            <td class="small campo-grilla">${atencion.fecha_ingreso_atencion}</td>
-            <td class="small campo-grilla">${atencion.historia_clinica}</td>
-            <td class="small ${styleCampoCuenta}">${atencion.cuenta_atencion_id ?? ""}</td>
-            <td class="small campo-grilla">${atencion.tipos_documento} ${atencion.numero_documento}</td>
+            <td class="small campo-grilla">${historia.historia_clinica_id}</td>
+            <td class="small campo-grilla">${historia.numero_historia}</td>
+            <td class="small campo-grilla">${historia.tipos_documento} ${historia.numero_documento}</td>
             <td class="small campo-grilla">
-                ${atencion.apellido_paterno} ${atencion.apellido_materno} ${atencion.nombres}
+                ${historia.apellido_paterno} ${historia.apellido_materno} ${historia.nombres}
             </td>
-            <td class="small campo-grilla">${atencion.fecha_nacimiento}</td>                    
-            <td class="small campo-grilla">${atencion.servicio_ingreso_eess}</td>
+            <td class="small campo-grilla">${historia.fecha_nacimiento}</td>                    
+            <td class="small campo-grilla">${historia.tipo_sexo}</td>
             ${extraColumns}
             ${btnsAccion}`;
 
@@ -601,14 +473,14 @@ function updatePagination(paginacion) {
 }
 
 async function paginaAnterior() {
-    console.log(this.moduloAuditoria);    
+    console.log(this.moduloHistoriaClinicas);    
     var _currentPage = 1;
-    switch (this.moduloAuditoria) {
-        case 'AuditoriaTriaje':
-            _currentPage = paginadoTriaje.currentPage;
+    switch (this.moduloHistoriaClinicas) {
+        case 'HistoriaClinicas':
+            _currentPage = paginadoHistoria.currentPage;
             if (_currentPage > 1) {
                 _currentPage--;
-                paginadoTriaje.currentPage = _currentPage;
+                paginadoHistoria.currentPage = _currentPage;
             }
             break;
         case 'AuditoriaOrdenes':
@@ -633,10 +505,10 @@ async function paginaAnterior() {
             }
             break;
         default:
-            _currentPage = paginadoTriaje.currentPage;
+            _currentPage = paginadoHistoria.currentPage;
             if (_currentPage > 1) {
                 _currentPage--;
-                paginadoTriaje.currentPage = _currentPage;
+                paginadoHistoria.currentPage = _currentPage;
             }
             break;
     }
@@ -645,10 +517,10 @@ async function paginaAnterior() {
 }
 
 async function paginaSiguiente() {
-    switch (this.moduloAuditoria) {
-        case 'AuditoriaTriaje':
-            if (paginadoTriaje.currentPage < totalPages) {
-                paginadoTriaje.currentPage++;
+    switch (this.moduloHistoriaClinicas) {
+        case 'HistoriaClinicas':
+            if (paginadoHistoria.currentPage < totalPages) {
+                paginadoHistoria.currentPage++;
                 await buscarAtenciones();
             }
             break;
@@ -671,8 +543,8 @@ async function paginaSiguiente() {
             }
             break;
         default:
-            if (paginadoTriaje.currentPage < totalPages) {
-                paginadoTriaje.currentPage++;
+            if (paginadoHistoria.currentPage < totalPages) {
+                paginadoHistoria.currentPage++;
                 await buscarAtenciones();
             }
             break;
@@ -786,7 +658,7 @@ async function btnConfirmarFUA() {
 }
 
 function abrirModalDetalle(idAtencionEESS) {
-    if (moduloAuditoria == "AuditoriaTriaje") {
+    if (moduloHistoriaClinicas == "AuditoriaTriaje") {
         var url = this.despliegue + '/Atencion/Triaje?id=' + idAtencionEESS;
 
         document.getElementById("loadingEvaluacion").classList.remove("d-none");
@@ -801,7 +673,7 @@ function abrirModalDetalle(idAtencionEESS) {
             await buscarAtenciones();
         });        
     }
-    else if (moduloAuditoria == "AuditoriaOrdenes") {
+    else if (moduloHistoriaClinicas == "AuditoriaOrdenes") {
         var url = this.despliegue + '/Atencion/Orden?id=' + idAtencionEESS;
 
         document.getElementById("loadingEvaluacion").classList.remove("d-none");
@@ -815,7 +687,7 @@ function abrirModalDetalle(idAtencionEESS) {
             await buscarAtenciones();
         });
     }
-    else if (moduloAuditoria == "AuditoriaCuentas") {
+    else if (moduloHistoriaClinicas == "AuditoriaCuentas") {
         var url = this.despliegue + '/Atencion/Cuenta?id=' + idAtencionEESS;
 
         document.getElementById("loadingEvaluacion").classList.remove("d-none");
@@ -955,7 +827,7 @@ async function btnBuscarAtencionesGrid() {
     var _currentPage = 1;
     switch (this.moduloAuditoria) {
         case 'AuditoriaTriaje':
-            paginadoTriaje.currentPage = _currentPage;
+            paginadoHistoria.currentPage = _currentPage;
             break;
         case 'AuditoriaOrdenes':
             paginadoOrden.currentPage = _currentPage;
@@ -967,7 +839,7 @@ async function btnBuscarAtencionesGrid() {
             paginadoSis.currentPage = _currentPage;
             break;
         default:
-            paginadoTriaje.currentPage = _currentPage;
+            paginadoHistoria.currentPage = _currentPage;
             break;
     }
     this.buscarAtenciones();

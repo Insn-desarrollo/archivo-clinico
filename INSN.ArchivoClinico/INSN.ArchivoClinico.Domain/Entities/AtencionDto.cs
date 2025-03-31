@@ -12,78 +12,27 @@ namespace INSN.ArchivoClinico.Domain.Entities
         public string Nombre { get; set; }
     }
 
-    public class AtencionConsultaDto
+    public class HistoriaClinicaDto
     {
-        public int atencion_id { get; set; }
-        public int? atencion_id_eess { get; set; }
-        public int? cuenta_atencion_id { get; set; }
-        public string? historia_clinica { get; set; }
-        public int? codigo_tipo_documento { get; set; }
+        public int historia_clinica_id { get; set; }
+        public int paciente_id { get; set; }
+        public string? numero_historia { get; set; }
+        public int codigo_tipo_documento { get; set; }
         public string? tipos_documento { get; set; }
         public string? numero_documento { get; set; }
         public string? apellido_paterno { get; set; }
         public string? apellido_materno { get; set; }
         public string? nombres { get; set; }
-        public string? fecha_nacimiento { get; set; }
-        public int? codigo_tipo_sexo { get; set; }
-        public int? codigo_tipo_servicio { get; set; }
-        public string? tipo_servicio { get; set; }
-        public string? fecha_ingreso_atencion { get; set; }
-        public int? servicio_ingreso_eess_id { get; set; }
-        public string? servicio_ingreso_eess { get; set; }
-        public int? auditoria_codigo_estado { get; set; }
-        public string? auditoria_estado { get; set; }
-        public int? auditoria_triaje_codigo_estado { get; set; }
-        public string? auditoria_triaje_estado { get; set; }
-        public string? auditoria_usuario { get; set; }  
-        public string? auditoria_observacion { get; set; }
-        public bool? auditoria_triaje_subsana_obs { get; set; }
-        public string? fuente_financiamiento { get; set; }
-        public string? fua_guid { get; set; }
-        public string? fua_mensaje { get; set; }
-        public string? fua_advertencia { get; set; }
-        public string? fua_lote { get; set; }
-        public string? fua_estado { get; set; }
-        public int? total_records { get; set; }
-        public int? total_pages { get; set; }
+        public string? fecha_nacimiento { get; set; } // Formateado como DD/MM/YYYY
+        public string? codigo_tipo_sexo { get; set; }
+        public string? tipo_sexo { get; set; }
+        public string? direccion { get; set; } = string.Empty;
+        public string? correo { get; set; } = string.Empty;
+        public int codigo_estado_historia { get; set; }
+        public string? estado_historia { get; set; }
+        public int total_records { get; set; }
+        public int total_pages { get; set; }
     }
-
-
-    //public class AtencionConsultaDto
-    //{
-    //    public int AtencionId { get; set; }
-    //    public int? AtencionIdEESS { get; set; }
-    //    public int? CuentaAtencionId { get; set; }
-    //    public int? CodigoTipoServicio { get; set; }
-    //    public string? TipoServicio { get; set; }
-    //    public string? HistoriaClinica { get; set; }
-    //    public int? CodigoTipoDocumento { get; set; }
-    //    public string? TiposDocumento { get; set; }
-    //    public string? NumeroDocumento { get; set; }
-    //    public string? ApellidoPaterno { get; set; }
-    //    public string? ApellidoMaterno { get; set; }
-    //    public string? Nombres { get; set; }
-    //    public string? FechaNacimiento { get; set; }
-    //    public int? CodigoTipoSexo { get; set; }
-    //    public string? FechaIngresoAtencion { get; set; }
-    //    public int? ServicioIngresoEESSId { get; set; }
-    //    public string? ServicioIngresoEESS { get; set; }
-    //    public int? AuditoriaCodigoEstado { get; set; }
-    //    public string? AuditoriaEstado { get; set; }
-    //    public int? AuditoriaTriajeCodigoEstado { get; set; }
-    //    public string? AuditoriaTriajeEstado { get; set; }
-    //    public string? AuditoriaObservacion { get; set; }
-    //    public string? FuenteFinanciamiento { get; set; }
-
-    //    public bool? AuditoriaTriajeSubsanaObs { get; set; }
-
-    //    public string? FuaGuid { get; set; }
-    //    public string? FuaMensaje { get; set; }
-    //    public string? FuaAdvertencia { get; set; }
-
-    //    public int? TotalRecords { get; set; }
-    //    public int? TotalPages { get; set; }
-    //}
 
     public class AtencionDto
     {

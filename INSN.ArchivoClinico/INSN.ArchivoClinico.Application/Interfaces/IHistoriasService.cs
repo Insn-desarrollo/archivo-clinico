@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace INSN.ArchivoClinico.Application.Interfaces
 {
-    public interface IAtencionService
+    public interface IHistoriasService
     {
         Task<List<ContadorPendientes>> ObtenerContadoresBandejaAsync();
         Task<AtencionDto> GetAtencionByIdAsync(string token, int atencionId);
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarTriajesAsync(AtencionFiltro filtro);
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarAdminAsync(AtencionFiltro filtro);
+        Task<IEnumerable<HistoriaClinicaDto>> ConsultarHistoriasAsync(HistoriaFiltro filtro);
         Task<List<Atencion>> GetAtencionAsync(int idAtencion);
         Task<AtencionDto> GetAtencionOrdenesByIdAsync(string token, int atencionId);
         Task<AtencionDto> GetAtencionCuentasByIdAsync(string token, int atencionId);
 
         //Task<AtencionDto> ObtenerAtencionPorIdAsync(int atencionId);
-        Task<List<AuditorDto>> ObtenerListaAuditoresAsync();       
+        Task<List<AuditorDto>> ObtenerListaUsuariosAsync();       
         Task<TriajeResponseDto> ActualizarTriaje(ActualizarTriajeRequest request);
         Task<bool> AsignarAtencionesAsync();
       

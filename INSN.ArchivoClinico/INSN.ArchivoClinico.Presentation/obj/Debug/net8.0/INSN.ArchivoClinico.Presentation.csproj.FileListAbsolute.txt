@@ -1,5 +1,5 @@
-H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\appsettings.json
 H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\appsettings.Development.json
+H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\appsettings.json
 H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\INSN.ArchivoClinico.Presentation.staticwebassets.runtime.json
 H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\INSN.ArchivoClinico.Presentation.exe
 H:\INSNB\archivo-clinico\INSN.ArchivoClinico\INSN.ArchivoClinico.Presentation\bin\Debug\net8.0\INSN.ArchivoClinico.Presentation.deps.json

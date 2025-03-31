@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace INSN.ArchivoClinico.Domain.Interfaces
 {
-    public interface IAtencionRepository
+    public interface IHistoriasRepository
     {
         Task<List<ContadorPendientes>> ObtenerContadoresBandejaAsync();
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarTriajesAsync(AtencionFiltro filtro);      
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarAdminAsync(AtencionFiltro filtro);
-        //Task<AtencionDto> ObtenerAtencionPorIdAsync(int atencionId);    
-        Task<List<AuditorDto>> ObtenerListaAuditoresAsync();          
+        Task<IEnumerable<HistoriaClinicaDto>> ConsultarHistoriasAsync(HistoriaFiltro filtro);      
+        Task<List<AuditorDto>> ObtenerListaUsuariosAsync();          
         Task<TriajeResponseDto> ActualizarTriajeAsync(ActualizarTriajeRequest request);      
         Task<bool> AsignarAtencionesAsync();      
         Task<long> RegistrarFuaAsync(Atencion atencion);

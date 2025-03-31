@@ -14,12 +14,6 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
             _cuentaRepository = cuentaRepository;
         }
 
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarCuentasAsync(AtencionFiltro filtro)
-        {
-            var atenciones = await _cuentaRepository.ConsultarCuentasAsync(filtro);
-            return atenciones;
-        }
-
         public async Task<List<FuenteFinanciamientoDto>> ObtenerFuentesFinanciamientoAsync()
         {
             return await _cuentaRepository.ObtenerFuentesFinanciamientoAsync();
@@ -28,12 +22,6 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
         public async Task<List<TipoFinanciamientoDto>> ObtenerTiposFinanciamientoAsync(int fuenteFinanciamientoId)
         {
             return await _cuentaRepository.ObtenerTiposFinanciamientoAsync(fuenteFinanciamientoId);
-        }
-
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarSISAsync(AtencionFiltro filtro)
-        {
-            var atenciones = await _cuentaRepository.ConsultarSISAsync(filtro);
-            return atenciones;
         }
 
         public async Task<TriajeResponseDto> ActualizarCuenta(ActualizarCuentaRequest request)

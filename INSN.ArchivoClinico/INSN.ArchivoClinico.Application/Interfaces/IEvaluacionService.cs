@@ -10,7 +10,6 @@ namespace INSN.ArchivoClinico.Application.Interfaces
 {
     public interface IEvaluacionService
     {
-        Task<IEnumerable<AtencionConsultaDto>> ConsultarOrdenesAsync(AtencionFiltro filtro);
         Task<List<EvaluacionMinDto>> ObtenerEvaluacionesPorAtencionAsync(int atencionId);   
         Task<EvaluacionDto> ObtenerDetalleEvaluacionAsync(long EvaluacionId);
         Task<ItemAuditoriaDto> ObtenerItemAuditoriaIdAsync(int evaluacionId, string puntoCarga);

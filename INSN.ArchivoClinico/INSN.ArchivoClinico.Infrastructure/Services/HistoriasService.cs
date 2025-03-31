@@ -12,14 +12,14 @@ using System;
 
 namespace INSN.ArchivoClinico.Infrastructure.Services
 {
-    public class AtencionService : IAtencionService
+    public class HistoriasService : IHistoriasService
     {
-        private readonly IAtencionRepository _atencionRepository;
+        private readonly IHistoriasRepository _atencionRepository;
         private readonly ICuentaRepository _cuentaRepository;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public AtencionService(IAtencionRepository atencionRepository, ICuentaRepository cuentaRepository, HttpClient httpClient, IConfiguration configuration)
+        public HistoriasService(IHistoriasRepository atencionRepository, ICuentaRepository cuentaRepository, HttpClient httpClient, IConfiguration configuration)
         {
             _atencionRepository = atencionRepository;
             _cuentaRepository = cuentaRepository;
@@ -33,16 +33,10 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
             return atenciones;
         }
 
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarTriajesAsync(AtencionFiltro filtro)
+        public async Task<IEnumerable<HistoriaClinicaDto>> ConsultarHistoriasAsync(HistoriaFiltro filtro)
         {
-            var atenciones = await _atencionRepository.ConsultarTriajesAsync(filtro);
+            var atenciones = await _atencionRepository.ConsultarHistoriasAsync(filtro);
             return atenciones;        
-        }
-
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarAdminAsync(AtencionFiltro filtro)
-        {
-            var atenciones = await _atencionRepository.ConsultarAdminAsync(filtro);
-            return atenciones;
         }
 
         public async  Task<AtencionDto> GetAtencionByIdAsync(string token, int atencionId)
@@ -127,9 +121,9 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
         }
 
 
-        public async Task<List<AuditorDto>> ObtenerListaAuditoresAsync()
+        public async Task<List<AuditorDto>> ObtenerListaUsuariosAsync()
         {
-            return await _atencionRepository.ObtenerListaAuditoresAsync();
+            return await _atencionRepository.ObtenerListaUsuariosAsync();
         }
 
         public async Task<TriajeResponseDto> ActualizarTriaje(ActualizarTriajeRequest request)

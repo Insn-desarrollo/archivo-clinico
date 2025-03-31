@@ -16,7 +16,7 @@ namespace INSN.ArchivoClinico.Controllers
     public class AtencionController : Controller
     {
         private readonly ILogger<AtencionController> _logger;
-        private readonly IAtencionService _atencionAppService;
+        private readonly IHistoriasService _atencionAppService;
         private readonly IEvaluacionService _evaluacionAppService;
         private readonly IFuaEmitidoService _IFuaEmitidoService;
         private readonly ICuentaService _cuentaAppService;
@@ -29,7 +29,7 @@ namespace INSN.ArchivoClinico.Controllers
 
         public AtencionController(
             ILogger<AtencionController> logger,
-            IAtencionService atencionAppService,
+            IHistoriasService atencionAppService,
             IEvaluacionService evaluacionAppService,
             IFuaEmitidoService iFuaEmitidoService,
             ICuentaService cuentaAppService,

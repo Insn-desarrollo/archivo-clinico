@@ -38,11 +38,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
 // Registro de dependencias
-builder.Services.AddScoped<IAtencionRepository, AtencionRepository>();
+builder.Services.AddScoped<IHistoriasRepository, HistoriasRepository>();
 builder.Services.AddScoped<ICuentaRepository, CuentaRepository>();
 builder.Services.AddScoped<IEvaluacionRepository, EvaluacionRepository>();
 builder.Services.AddScoped<TokenValidationFilter>(); 
-builder.Services.AddScoped<IAtencionService, AtencionService>();
+builder.Services.AddScoped<IHistoriasService, HistoriasService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 builder.Services.AddScoped<IEvaluacionService, EvaluacionService>();
 builder.Services.AddScoped<IExternoService, ExternoService>();

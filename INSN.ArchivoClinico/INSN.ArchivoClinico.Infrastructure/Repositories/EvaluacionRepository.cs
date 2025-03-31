@@ -25,56 +25,7 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
             _context = context;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarOrdenesAsync(AtencionFiltro filtro)
-        {
-            try
-            {
-
            
-            using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
-
-            string sql = @"SELECT * FROM public.fn_auditoria_bandeja_ordenes(
-                     @p_fecha::date,
-                     @p_nombre,
-                     @p_historia_clinica,
-                     @p_documento_identidad,
-                     @p_nro_cuenta,
-                     @p_codigo_estado,
-                     @p_tipo_servicio,
-                     @p_usuario,
-                     @p_habilitar_fecha,
-                     @p_page_number,
-                     @p_page_size
-                   );";
-
-            var parametros = new
-            {
-                p_fecha = filtro.Fecha ?? (object)DBNull.Value,
-                p_nombre = filtro.Nombre ?? string.Empty,
-                p_historia_clinica = filtro.HistoriaClinica ?? string.Empty,
-                p_documento_identidad = filtro.DocumentoIdentidad ?? string.Empty,
-                p_nro_cuenta = filtro.NroCuenta ?? string.Empty,
-                p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,
-                p_tipo_servicio = filtro.TipoServicio ?? (object)DBNull.Value,
-                p_usuario = filtro.Usuario ?? string.Empty,
-                p_habilitar_fecha = filtro.HabilitarFecha,
-                p_page_number = filtro.Page,
-                p_page_size = filtro.PageSize
-            };
-
-            var resultados = await connection.QueryAsync<AtencionConsultaDto>(sql, parametros);
-
-            return resultados;
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
 
 
         public async Task<EvaluacionDto> ObtenerEvaluacionPorIdAsync(long evaluacionEessId)

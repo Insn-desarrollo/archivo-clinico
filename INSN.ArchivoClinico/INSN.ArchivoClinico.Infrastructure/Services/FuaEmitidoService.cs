@@ -7,10 +7,10 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
 {
     public class FuaEmitidoService : IFuaEmitidoService
     {
-        private readonly IAtencionRepository _atencionRepository;
+        private readonly IHistoriasRepository _atencionRepository;
         private readonly IConfiguration _configuration;
 
-        public FuaEmitidoService(IAtencionRepository atencionRepository, IConfiguration configuration)
+        public FuaEmitidoService(IHistoriasRepository atencionRepository, IConfiguration configuration)
         {
             _atencionRepository = atencionRepository;
             _configuration = configuration;

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("INSN.ArchivoClinico.Presentation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96b39894559a56ee99dd1c2af908e8afb8d76416")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c699ffddebc5a108ceae850001c2312f635c163c")]
 [assembly: System.Reflection.AssemblyProductAttribute("INSN.ArchivoClinico.Presentation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("INSN.ArchivoClinico.Presentation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

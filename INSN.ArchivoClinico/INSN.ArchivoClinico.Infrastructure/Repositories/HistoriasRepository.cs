@@ -23,11 +23,11 @@ using Newtonsoft.Json.Linq;
 
 namespace INSN.ArchivoClinico.Infrastructure.Repositories
 {
-    public class AtencionRepository : IAtencionRepository
+    public class HistoriasRepository : IHistoriasRepository
     {
         private readonly AppDbContext _context;
         private readonly string _connectionString;
-        public AtencionRepository(AppDbContext context, IConfiguration configuration)
+        public HistoriasRepository(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -128,82 +128,35 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
             return resultados;
         }
 
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarTriajesAsync(AtencionFiltro filtro)
+        public async Task<IEnumerable<HistoriaClinicaDto>> ConsultarHistoriasAsync(HistoriaFiltro filtro)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            string sql = @"SELECT * FROM public.fn_auditoria_bandeja_triaje(
-                     @p_fecha::date,
-                     @p_nombre,
+            string sql = @"SELECT * FROM public.fn_historias_clinicas(
                      @p_historia_clinica,
                      @p_documento_identidad,
-                     @p_nro_cuenta,
+                     @p_nombre,
                      @p_codigo_estado,
-                     @p_tipo_servicio,
-                     @p_usuario,
-                     @p_habilitar_fecha,
                      @p_page_number,
                      @p_page_size
                    );";
 
             var parametros = new
             {
-                p_fecha = filtro.Fecha ?? (object)DBNull.Value,
-                p_nombre = filtro.Nombre ?? string.Empty,
                 p_historia_clinica = filtro.HistoriaClinica ?? string.Empty,
                 p_documento_identidad = filtro.DocumentoIdentidad ?? string.Empty,
-                p_nro_cuenta = filtro.NroCuenta ?? string.Empty,
-                p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,
-                p_tipo_servicio = filtro.TipoServicio ?? (object)DBNull.Value,
-                p_usuario = filtro.Usuario ?? string.Empty,
-                p_habilitar_fecha = filtro.HabilitarFecha,
+                p_nombre = filtro.Nombre ?? string.Empty,                
+                p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,                
                 p_page_number = filtro.Page,
                 p_page_size = filtro.PageSize
             };
 
-            var resultados = await connection.QueryAsync<AtencionConsultaDto>(sql, parametros);
+            var resultados = await connection.QueryAsync<HistoriaClinicaDto>(sql, parametros);
 
             return resultados;
         }     
-        public async Task<IEnumerable<AtencionConsultaDto>> ConsultarAdminAsync(AtencionFiltro filtro)
-        {
-            using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
 
-            string sql = @"SELECT * FROM public.fn_auditoria_bandeja_admin(
-                     @p_fecha::date,
-                     @p_nombre,
-                     @p_historia_clinica,
-                     @p_documento_identidad,
-                     @p_nro_cuenta,
-                     @p_codigo_estado,
-                     @p_tipo_servicio,
-                     @p_usuario,
-                     @p_habilitar_fecha,
-                     @p_page_number,
-                     @p_page_size
-                   );";
-
-            var parametros = new
-            {
-                p_fecha = filtro.Fecha ?? (object)DBNull.Value,
-                p_nombre = filtro.Nombre ?? string.Empty,
-                p_historia_clinica = filtro.HistoriaClinica ?? string.Empty,
-                p_documento_identidad = filtro.DocumentoIdentidad ?? string.Empty,
-                p_nro_cuenta = filtro.NroCuenta ?? string.Empty,
-                p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,
-                p_tipo_servicio = filtro.TipoServicio ?? (object)DBNull.Value,
-                p_usuario = filtro.Usuario ?? string.Empty,
-                p_habilitar_fecha = false, //filtro.HabilitarFecha,
-                p_page_number = filtro.Page,
-                p_page_size = filtro.PageSize
-            };
-
-            var resultados = await connection.QueryAsync<AtencionConsultaDto>(sql, parametros);
-
-            return resultados;
-        }
         public async Task<TriajeResponseDto> ActualizarTriajeAsync(ActualizarTriajeRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -290,7 +243,7 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
             return resultado;
         }
 
-        public async Task<List<AuditorDto>> ObtenerListaAuditoresAsync()
+        public async Task<List<AuditorDto>> ObtenerListaUsuariosAsync()
         {
             var auditores = new List<AuditorDto>();
 
@@ -470,8 +423,6 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
                 throw new ApplicationException("Error al registrar el FUA.", ex);
             }
         }
-
-
 
         //public async Task<decimal> RegistrarFuaAsync(Atencion atencion)
         //{
