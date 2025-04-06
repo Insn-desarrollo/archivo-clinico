@@ -133,7 +133,7 @@
                         </div>
                         <div class="col-sm-6 mb-2">
                             <label for="TipoFinanciamientoId" class="col-form-label">Tipo Financiamiento *</label>
-                            <select class="form-select" id="TipoFinanciamientoId" name="TipoFinanciamientoId">
+                          @*   <select class="form-select" id="TipoFinanciamientoId" name="TipoFinanciamientoId">
                                 @foreach (var tipo in Model.tipos_financiamiento)
                                 {
                                     if (tipo.tipo_financiamiento_id == Model.tipo_financiamiento_id)
@@ -145,7 +145,7 @@
                                         <option value="@tipo.tipo_financiamiento_id">@tipo.descripcion</option>
                                     }
                                 }
-                            </select>
+                            </select> *@
                         </div>
                     </div>
                 </div>

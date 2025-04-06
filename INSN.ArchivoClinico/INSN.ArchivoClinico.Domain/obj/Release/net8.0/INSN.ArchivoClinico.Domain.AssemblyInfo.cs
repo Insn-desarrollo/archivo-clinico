@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("INSN.ArchivoClinico.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96b39894559a56ee99dd1c2af908e8afb8d76416")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39d76280e7ea1e3b316f9c060008f8a0d7944047")]
 [assembly: System.Reflection.AssemblyProductAttribute("INSN.ArchivoClinico.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("INSN.ArchivoClinico.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

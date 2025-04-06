@@ -8,38 +8,19 @@
     </div>
 </div>
 
+<!-- Controles de paginación -->
+@Html.Partial("_PaginationPartial")
+
 <div class="mb-2">
     <div class="row">
-        <div class="table-responsive">
-            <table class="table table-striped table-sm">
-                <thead class="header-grilla text-white text-center" style="background-color: rgba(74, 144, 226, 1)">
-                    <tr>
-                        <th rowspan="2">Codigo</th>
-                        <th rowspan="2">Historia Clinica</th>
-                        <th rowspan="2">Documento de Identidad</th>
-                        <th rowspan="2">Paciente</th>
-                        <th rowspan="2">Fecha Nacimiento</th>
-                        <th rowspan="2">Tipo Sexo</th>
-                        <th rowspan="2">Direccion</th>
-                        <th rowspan="2">Correo</th>
-                        <th rowspan="2">Estado</th>                        
-                        <th rowspan="2">Acciones</th>
-                    </tr>                
-                </thead>
-                <tbody style="font-family: 'Open Sans', sans-serif;">
-                </tbody>
-            </table>
-        </div>
-
-
+        <div class="row" id="cardsContainer"></div>     
         <div id="MensajeNoResultados" class="alert alert-info" style="display:none;">
             No se encontraron resultados.
         </div>
     </div>
 </div>
 
-<!-- Controles de paginación -->
-@Html.Partial("_PaginationPartial")
+
 
 
 

@@ -1,5 +1,5 @@
-﻿var despliegue = "/apwAuditoria";
-var desplieguePost = "/apwAuditoria";
+﻿var despliegue = "/apwArchivoClinico";
+var desplieguePost = "/apwArchivoClinico";
 var texto_confirmar = 'SI'; //'Sí, guardar';
 var texto_cancelar = 'NO'; //' 'No, cancelar'';
 
@@ -421,176 +421,32 @@ function cargarItemAuditoriaModal(idItemAuditoria, puntoCarga) {
 }
 
 
-async function obtenerEvaluacionDetalles(evaluacionEessId) {
+async function obtenerEvaluacionDetalles(atencionId) {
+    console.log(atencionId);
     try {
         document.getElementById("loadingOverlay").classList.remove("d-none");
-        const response = await fetch(`${this.despliegue}/Atencion/DetalleEvaluacion/${evaluacionEessId}`);
+        const response = await fetch(`${this.despliegue}/Atencion/Evaluaciones/${atencionId}`);
         if (response.ok) {
             const evaluacionJson = await response.json();            
-            const datosEvaluacion = evaluacionJson.data;
-            const btnAceptarMasivo = document.getElementById("btnAceptarMasivo");
-            const btnEnviarRecetaOrden = document.getElementById("btnEnviarRecetaOrden");
+            //const datosEvaluacion = evaluacionJson.data;
+            //const btnAceptarMasivo = document.getElementById("btnAceptarMasivo");
 
-            document.getElementById("FechaEvaluacion").value = formatToLocalDate(datosEvaluacion.fecha_evaluacion);
-            document.getElementById("HoraEvaluacion").value = datosEvaluacion.hora_evaluacion ?? "";
-            document.getElementById("ServicioEESS").value = datosEvaluacion.servicio_eess ?? ""; 
-            document.getElementById("RecetaEstado").textContent = "Estado: " + datosEvaluacion.receta_estado;
-            document.getElementById("OrdenEstado").textContent = "Estado: " + datosEvaluacion.orden_estado;
+            //console.log(datosEvaluacion);
 
-            if (datosEvaluacion.codigo_estado_receta === 1 || datosEvaluacion.codigo_estado_orden === 1) {
-                btnAceptarMasivo.classList.remove("d-none");
-            } else {
-                btnAceptarMasivo.classList.add("d-none");
-            }  
-
-            if (datosEvaluacion.codigo_estado_receta === 2 && datosEvaluacion.codigo_estado_orden === 2) {
-                btnEnviarRecetaOrden.classList.remove("d-none");
-            } else {
-                btnEnviarRecetaOrden.classList.add("d-none"); 
-            }       
-
-            document.getElementById("AuditoriaEvaluacionCodigoEstadoHidden").value = datosEvaluacion.auditoria_codigo_estado ?? "";
-            cambiarEstadoEvaluacion(evaluacionEessId, datosEvaluacion.auditoria_codigo_estado);
-            const correctoRadio = document.getElementById("EvaluacionCorrecto");
-            const observadoRadio = document.getElementById("EvaluacionObservado");
-            const observacionContainer = document.getElementById("AuditoriaEvaluacionObservacionContainer");
-            if (datosEvaluacion.auditoria_codigo_estado == 2)
-            {
-                correctoRadio.checked = true;
-                observacionContainer.style.display = "none";
-            } else if (datosEvaluacion.auditoria_codigo_estado === 3) {
-                observadoRadio.checked = true;
-                observacionContainer.style.display = "block"; 
-            } else {
-                correctoRadio.checked = false;
-                observadoRadio.checked = false;
-                observacionContainer.style.display = "none";
-            }            
-
-            document.getElementById("AuditoriaEvaluacionObservacion").value = datosEvaluacion.auditoria_observacion ?? "";
-            document.getElementById("idEvaluacionHidden").value = datosEvaluacion.evaluacion_id ?? "";
-            document.getElementById("idEvaluacionEESSHidden").value = datosEvaluacion.evaluacion_eess_id ?? "";
-            
-            console.log(datosEvaluacion);
-
-            const diagnosticos = datosEvaluacion.diagnosticos;
-            const diagnosticosTableBody = document.getElementById('diagnosticosTableBody');
-            diagnosticosTableBody.innerHTML = '';
-            diagnosticos.forEach(d => {
-                const row = `
-                <tr>
-                    <td class="text-center">${d.numero_orden}</td>
-                    <td class="text-center">${d.codigo_diagnostico}</td>
-                    <td class="text-center">${d.tipo_diagnostico}</td>
-                    <td class="text-center">${d.diagnostico}</td>
-                    <td class="text-center">${d.es_principal ? 'Sí' : 'No'}</td>
-                </tr>`;
-                diagnosticosTableBody.innerHTML += row;
-            });
-
-            // Actualizar Procedimientos
-            const procedimientos = datosEvaluacion.examenesAuxiliares;
-            const procedimientosTableBody = document.getElementById('procedimientosTableBody');
-            procedimientosTableBody.innerHTML = '';
-
-            procedimientos.forEach(p => {
-                let text_fuente = '';
-                var btn_fuente = 'btn-primary';
-                let text_estado = p.auditoria_estado;
-                var titulo_btn = 'Actualizar Auditoría';
-                var icon = 'edit';
-                if (p.auditoria_codigo_estado === 2) {
-                    text_fuente = 'text-primary';
-                    btn_fuente = 'btn-primary';
-                } else if (p.auditoria_codigo_estado === 3) {
-                    text_fuente = 'text-danger';
-                    titulo_btn = 'Editar Observación';
-                    btn_fuente = 'btn-danger';
-                    icon = 'edit_note';                    
-                } else if (p.auditoria_codigo_estado === 5) {
-                    text_fuente = 'text-success';
-                    btn_fuente = 'btn-success';
-                    titulo_btn = 'Actualizar Auditoría';                
-                } else {
-                    text_fuente = '';
-                }
-
-                const row = `
-            <tr>
-            <td class="text-center">
-                <div class="d-flex gap-2">
-                      <button type="button" class="btn ${btn_fuente} w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="cargarItemAuditoriaModal(${p.evaluacion_procedimiento_id}, 'PROCEDIMIENTO')" data-bs-toggle="tooltip" data-bs-placement="top" title="${titulo_btn}">
-                            <i class="material-icons">${icon}</i>
-                      </button>              
-             
-                </div>
-            </td>            
-            <td class="text-center">${p.grupo || 'N/A'}</td>
-            <td class="text-center">${p.servicio || 'N/A'}</td>
-            <td class="text-center">${p.codigo_procedimiento || 'N/A'}</td>
-            <td class="text-center">${p.procedimiento || 'N/A'}</td>
-            <td class="text-center">${p.codigo_diagnostico || 'N/A'}</td>
-            <td class="text-center">${p.cantidad_prescrita || 0}</td>
-            <td class="text-center">${p.auditoria_cantidad || 0}</td>
-            <td class="text-center">${p.cantidad_entregada || 0}</td>
-            <td class="text-center ${text_fuente}">${text_estado || 'Pendiente'}</td>
-            <td class="text-center">${p.tiene_resultado == true ? 'SI' : ''}</td>
-        </tr>`;
-                procedimientosTableBody.innerHTML += row;
-            });
-
-            const medicamentos = datosEvaluacion.medicamentos;
-            const medicamentosTableBody = document.getElementById('medicamentosTableBody');
-            medicamentosTableBody.innerHTML = '';
-
-            medicamentos.forEach(m => {
-                let text_fuente = '';
-                var btn_fuente = 'btn-primary';
-                let text_estado = m.auditoria_estado;
-                var titulo_btn = 'Actualizar Auditoría';
-                var icon = 'edit';
-                if (m.auditoria_codigo_estado === 2) {
-                    text_fuente = 'text-primary';
-                    btn_fuente = 'btn-primary';
-                } else if (m.auditoria_codigo_estado === 3) {
-                    text_fuente = 'text-danger';
-                    titulo_btn = 'Editar Observación';
-                    btn_fuente = 'btn-danger';
-                    icon = 'edit_note';
-                } else if (m.auditoria_codigo_estado === 5) {
-                    text_fuente = 'text-success';
-                    btn_fuente = 'btn-success';
-                    titulo_btn = 'Actualizar Auditoría';
-                } else {
-                    text_fuente = '';
-                }
-
-                const row = `<tr>
-
-                    <td class="text-center">
-                        <div class="d-flex gap-2">
-
-                            <button type="button" class="btn ${btn_fuente} w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn" onclick="cargarItemAuditoriaModal(${m.evaluacion_medicamento_id}, 'FARMACIA')" data-bs-toggle="tooltip" data-bs-placement="top" title="${titulo_btn}">
-                                <i class="material-icons">${icon}</i>
-                            </button>                                         
-                                                   
-                        </div>
-                    </td>
-
-                    <td class="text-center">${m.codigo_medicamento}</td>
-                    <td class="text-center">${m.medicamento}</td>
-                    <td class="text-center">${m.codigo_sismed}</td>
-                    <td class="text-center">${m.dosis || ''}</td>
-                    <td class="text-center">${m.dias || ''}</td>
-                    <td class="text-center">${m.codigo_diagnostico || ''}</td>
-                    <td class="text-center">${m.cantidad_prescrita || 0}</td>
-                    <td class="text-center">${m.auditoria_cantidad || 0}</td>
-                    <td class="text-center">${m.cantidad_entregada || 0}</td>
-                    <td class="text-center ${text_fuente}">${text_estado || 'Pendiente'}</td>
-                    <td class="text-center">${m.entregado == true ? 'SI' : ''}</td>
-                </tr>`;
-                medicamentosTableBody.innerHTML += row;
-            });
+            //const diagnosticos = datosEvaluacion.diagnosticos;
+            //const diagnosticosTableBody = document.getElementById('diagnosticosTableBody');
+            //diagnosticosTableBody.innerHTML = '';
+            //diagnosticos.forEach(d => {
+            //    const row = `
+            //    <tr>
+            //        <td class="text-center">${d.numero_orden}</td>
+            //        <td class="text-center">${d.codigo_diagnostico}</td>
+            //        <td class="text-center">${d.tipo_diagnostico}</td>
+            //        <td class="text-center">${d.diagnostico}</td>
+            //        <td class="text-center">${d.es_principal ? 'Sí' : 'No'}</td>
+            //    </tr>`;
+            //    diagnosticosTableBody.innerHTML += row;
+            //});                 
 
 
 
@@ -988,15 +844,50 @@ function mostrarMensaje(mensaje, tipo) {
     });
 }
 
-function SubsanarObservacion() {
-    //const checkbox = document.getElementById('AuditoriaOrdenSubsanaObs');
-    //const container = document.getElementById('AuditoriaOrdenSubsanaObsTextoContainer');
-    //if (checkbox.checked) {
-    //    container.style.display = 'block';
-    //} else {
-    //    container.style.display = 'none';
-    //}
+
+const botones = document.querySelectorAll('.responsive-btn');
+
+botones.forEach(btn => {
+    const targetId = btn.getAttribute('data-bs-target');
+    const collapseEl = document.querySelector(targetId);
+
+    if (collapseEl) {
+        collapseEl.addEventListener('show.bs.collapse', () => {
+            btn.querySelector('i').textContent = 'expand_less';
+        });
+
+        collapseEl.addEventListener('hide.bs.collapse', () => {
+            btn.querySelector('i').textContent = 'expand_more';
+        });
+    }
+});
+
+function mostrarDocumento(ruta) {
+    // Verificamos si la URL es válida
+    if (ruta) {
+        // Abrimos una nueva ventana con las opciones de la ruta
+        const nuevaVentana = window.open(ruta, '_blank');
+
+        // Si la ventana no se abre (por ejemplo, bloqueada por un popup blocker), mostramos un mensaje
+        if (!nuevaVentana) {
+            alert('No se pudo abrir el documento en una nueva ventana. Verifique la configuración de su navegador.');
+        }
+    } else {
+        alert('La ruta del documento no es válida.');
+    }
 }
+
+
+//function mostrarDocumento(ruta) {
+//    const visor = document.getElementById("visorDocumento");
+//    const contenedor = document.getElementById("visorDocumentoContainer");
+
+//    if (visor && contenedor) {
+//        visor.src = ruta;
+//        contenedor.style.display = "block";
+//    }
+//}
+
 
 function actualizarCantidadAsignada(isChecked) {
     const inputCantidad = document.getElementById('itemAuditoriaCantidad');

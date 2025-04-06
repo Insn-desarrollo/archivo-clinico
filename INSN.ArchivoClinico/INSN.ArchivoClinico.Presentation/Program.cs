@@ -58,13 +58,13 @@ builder.Services.AddSingleton<AuthService>();
 
 builder.Services.AddScoped<IJwtBuilder, JwtBuilder>(); // Servicio para crear el JWT
 
-// Configurar el contexto de datos
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔹 Agregar configuración de conexión a PostgreSQL
 builder.Services.AddScoped<IDbConnection>(sp =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IPgDatabaseService, PgDatabaseService>();
 
 
 builder.Services.AddCors(options =>

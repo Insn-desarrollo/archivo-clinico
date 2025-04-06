@@ -16,7 +16,7 @@ namespace INSN.ArchivoClinico.Controllers
     public class AtencionController : Controller
     {
         private readonly ILogger<AtencionController> _logger;
-        private readonly IHistoriasService _atencionAppService;
+        private readonly IHistoriasService _historiaService;
         private readonly IEvaluacionService _evaluacionAppService;
         private readonly IFuaEmitidoService _IFuaEmitidoService;
         private readonly ICuentaService _cuentaAppService;
@@ -29,7 +29,7 @@ namespace INSN.ArchivoClinico.Controllers
 
         public AtencionController(
             ILogger<AtencionController> logger,
-            IHistoriasService atencionAppService,
+            IHistoriasService historiaService,
             IEvaluacionService evaluacionAppService,
             IFuaEmitidoService iFuaEmitidoService,
             ICuentaService cuentaAppService,
@@ -41,12 +41,13 @@ namespace INSN.ArchivoClinico.Controllers
             IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
-            _atencionAppService = atencionAppService;
+            _historiaService = historiaService;
             _evaluacionAppService = evaluacionAppService;
             _IFuaEmitidoService = iFuaEmitidoService;
             _cuentaAppService = cuentaAppService;
             _externoAppService = externoAppService;
             _atencionHceService = atencionHceService;
+
             _httpClient = httpClient;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
@@ -94,7 +95,7 @@ namespace INSN.ArchivoClinico.Controllers
 
             try
             {
-                var atencion = await _atencionAppService.GetAtencionByIdAsync(token, id);
+                var atencion = await _historiaService.GetAtencionByIdAsync(token, id);
                 if (atencion == null)
                 {
                     return NotFound("Atención no encontrada.");
@@ -112,7 +113,7 @@ namespace INSN.ArchivoClinico.Controllers
         }
 
          
-        public async Task<IActionResult> Orden(int id)
+        public async Task<IActionResult> Atenciones(string id)
         {
             var token = HttpContext.Session.GetString("AuthToken");
 
@@ -123,13 +124,13 @@ namespace INSN.ArchivoClinico.Controllers
 
             try
             {
-                var atencion = await _atencionAppService.GetAtencionOrdenesByIdAsync(token, id);
-                if (atencion == null)
+                var paciente = await _historiaService.ConsultarPacienteAsync(id);
+                if (paciente == null)
                 {
                     return NotFound("Atención no encontrada.");
                 }
 
-                return View(atencion);
+                return View(paciente);
             }
             catch (Exception ex)
             {
@@ -138,6 +139,37 @@ namespace INSN.ArchivoClinico.Controllers
             }
 
         }
+
+        public async Task<IActionResult> Evaluaciones(int id)
+        {
+            var token = "";
+            try
+            {
+                token = GetAuthToken();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            try
+            {
+                var evaluaciones = await _historiaService.ConsultarEvaluacionesEmergenciaAsync(id);
+                if (evaluaciones != null)
+                {
+                    return Json(new { success = true, data = evaluaciones });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error al obtener la atención." });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al llamar al servicio de Evaluacion.");
+                return Json(new { success = false, message = "Ocurrió un error al comunicarse con el servicio de Evaluacion." });
+            }
+        }   
 
         public async Task<IActionResult> Cuenta(int id)
         {
@@ -150,7 +182,7 @@ namespace INSN.ArchivoClinico.Controllers
 
             try
             {
-                var atencion = await _atencionAppService.GetAtencionCuentasByIdAsync(token, id);
+                var atencion = await _historiaService.GetAtencionCuentasByIdAsync(token, id);
                 if (atencion == null)
                 {
                     return NotFound("Atención no encontrada.");
@@ -292,7 +324,7 @@ namespace INSN.ArchivoClinico.Controllers
                 request.AuditoriaTriajeSubsanaObsTexto = request.AuditoriaTriajeSubsanaObsTexto?.Trim();
                 request.AuditoriaUsuario = usuario;
 
-                var resultado = await _atencionAppService.ActualizarTriaje(request).ConfigureAwait(false);
+                var resultado = await _historiaService.ActualizarTriaje(request).ConfigureAwait(false);
                 if (resultado == null)
                 {
                     return NotFound("No se actualizó la cuenta.");
@@ -437,7 +469,7 @@ namespace INSN.ArchivoClinico.Controllers
             var usuario = this.GetUsuario();
             try
             {
-                var resultado = await _atencionAppService.AsignarAtencionesAsync();
+                var resultado = await _historiaService.AsignarAtencionesAsync();
                 if (resultado == null)
                 {
                     return NotFound("No se pudo asignar automaticamente.");
@@ -501,7 +533,7 @@ namespace INSN.ArchivoClinico.Controllers
             var usuario = this.GetUsuario();
             var tokenSIS = await _authService.AuthenticateAsync();
 
-            var atencionPaciente = await _atencionAppService.GetAtencionOrdenesByIdAsync(tokenAppHce, id);
+            var atencionPaciente = await _historiaService.GetAtencionOrdenesByIdAsync(tokenAppHce, id);
 
             if (atencionPaciente == null)
             {

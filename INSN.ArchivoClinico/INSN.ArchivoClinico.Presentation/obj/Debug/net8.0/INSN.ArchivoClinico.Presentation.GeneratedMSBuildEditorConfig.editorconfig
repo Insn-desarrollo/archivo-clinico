@@ -26,12 +26,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Cuenta.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cQ3VlbnRhLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Orden.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cT3JkZW4uY3NodG1s
+[H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Atenciones.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXRlbmNpb25cQXRlbmNpb25lcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [H:/INSNB/archivo-clinico/INSN.ArchivoClinico/INSN.ArchivoClinico.Presentation/Views/Atencion/Triaje.cshtml]

@@ -245,10 +245,6 @@
       "PackagePath": "staticwebassets\\js\\orden.js"
     },
     {
-      "Id": "H:\\INSNB\\archivo-clinico\\INSN.ArchivoClinico\\INSN.ArchivoClinico.Presentation\\wwwroot\\js\\triaje.js",
-      "PackagePath": "staticwebassets\\js\\triaje.js"
-    },
-    {
       "Id": "H:\\INSNB\\archivo-clinico\\INSN.ArchivoClinico\\INSN.ArchivoClinico.Presentation\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },

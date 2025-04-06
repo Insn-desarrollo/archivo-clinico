@@ -34,6 +34,63 @@ namespace INSN.ArchivoClinico.Domain.Entities
         public int total_pages { get; set; }
     }
 
+    public class HistoriaClinicaConsultaDto
+    {
+        public int historia_clinica_id { get; set; }
+        public int paciente_id { get; set; }
+        public string? numero_historia { get; set; }
+        public int codigo_tipo_documento { get; set; }
+        public string? tipos_documento { get; set; }
+        public string? numero_documento { get; set; }
+        public string? apellido_paterno { get; set; }
+        public string? apellido_materno { get; set; }
+        public string? nombres { get; set; }
+        public string? fecha_nacimiento { get; set; } 
+        public string? codigo_tipo_sexo { get; set; }
+        public string? tipo_sexo { get; set; }
+        public string? direccion { get; set; } = string.Empty;
+        public string? correo { get; set; } = string.Empty;
+        public int codigo_estado_historia { get; set; }
+        public string? estado_historia { get; set; }
+        public IEnumerable<AtencionHcDto>? atenciones { get; set; }
+    }
+
+    public class AtencionHcDto
+    {
+        public int atencion_id { get; set; }
+        public string? historia_clinica { get; set; }
+        public string? numero_documento { get; set; }
+        public string? nombre_paciente { get; set; }
+        public string? servicio { get; set; }
+        public string? fecha_hora_atencion { get; set; }
+        public IEnumerable<EvaluacionHcDto>? evaluaciones { get; set; }
+        public IEnumerable<DocumentosEvaluacionHC>? documentosAtencion { get; set; }
+    }
+
+    public class EvaluacionHcDto
+    {
+        public int evaluacion_id { get; set; }
+        public string? fecha_hora_evaluacion { get; set; }
+        public IEnumerable<DocumentosEvaluacionHC>? documentos { get; set; }
+    }
+
+    public class DocumentosEvaluacionHC
+    {
+        public int? triaje_id { get; set; }
+        public int? atencion_id { get; set; }
+        public int? evaluacion_id { get; set; }
+        public string? historia_clinica { get; set; }
+        public string? paciente { get; set; }
+        public string? tipo_documento { get; set; }
+        public string? documento { get; set; }
+        public string? estado { get; set; }
+        public string? fecha_registro { get; set; }
+        public string? fecha_firma { get; set; }
+        public string? profesional_id { get; set; }
+
+    }
+
+
     public class AtencionDto
     {
         public int atencion_id { get; set; }
@@ -99,7 +156,6 @@ namespace INSN.ArchivoClinico.Domain.Entities
         public List<EvaluacionCuentaMedicamentoDto>? evaluaciones_cuenta_medicamentos { get; set; }
         public List<ObservacionTriaje>? observaciones_triaje { get; set; }
     }
-
     public class ObservacionTriaje
     {
         public int observacion_triaje_id { get; set; }
@@ -108,7 +164,6 @@ namespace INSN.ArchivoClinico.Domain.Entities
         public int codigo_estado_observacion { get; set; }
         public string estado_observacion { get; set; }
     }
-
     public class FuenteFinanciamientoDto
     {
         public int fuente_financiamiento_id { get; set; }

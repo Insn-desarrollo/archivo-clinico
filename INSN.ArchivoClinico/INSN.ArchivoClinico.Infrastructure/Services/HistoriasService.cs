@@ -9,6 +9,7 @@ using System.Text;
 using INSN.ArchivoClinico.Domain.UtilFactory.Base;
 using Newtonsoft.Json;
 using System;
+using System.Reflection.Metadata;
 
 namespace INSN.ArchivoClinico.Infrastructure.Services
 {
@@ -38,6 +39,67 @@ namespace INSN.ArchivoClinico.Infrastructure.Services
             var atenciones = await _atencionRepository.ConsultarHistoriasAsync(filtro);
             return atenciones;        
         }
+
+        public async Task<HistoriaClinicaConsultaDto> ConsultarPacienteAsync(string historia)
+        {
+            var auditoriaUrl = _configuration["ApiUrls:Auditoria"];
+            var emergenciaUrl = _configuration["ApiUrls:Emergencia"];
+            var urlPdf = "";
+            var paciente = await _atencionRepository.ConsultarPacienteAsync(historia);
+            var atenciones = await _atencionRepository.ConsultarAtencionesEmergenciaAsync(historia);            
+            foreach (var atencion in atenciones)
+            {
+                var evaluaciones = await _atencionRepository.ConsultarEvaluacionesEmergenciaAsync(atencion.atencion_id);
+                var documentosA = await _atencionRepository.ConsultaDocumentoAtencion(atencion.atencion_id);
+                foreach (var item in documentosA)
+                {
+                    if (item.tipo_documento == "Formato Fua" && item.documento == null)
+                        urlPdf = $"{auditoriaUrl}/Fua/reporte?idAtencion={item.atencion_id}";
+
+                    if (item.tipo_documento == "Papeleta Egreso" && item.documento == null)
+                        urlPdf = $"{emergenciaUrl}/egresos/pdf?atencionId={item.atencion_id}";
+
+                    item.documento = (item.documento == null) ? urlPdf : item.documento;
+                }
+                atencion.documentosAtencion = documentosA;
+
+                foreach (var evaluacion in evaluaciones)
+                {
+                    var documentos = await _atencionRepository.ConsultaDocumentoEvaluacion(evaluacion.evaluacion_id);
+                    
+                    foreach (var item in documentos)
+                    {
+                        if (item.tipo_documento == "Historia Clinica" && item.documento == null)
+                            urlPdf = $"{emergenciaUrl}/evaluaciones/pdf?evaluacionId={item.evaluacion_id}";
+
+                        if (item.tipo_documento == "Orden" && item.documento == null)
+                            urlPdf = $"{emergenciaUrl}/evaluaciones/ordenes?evaluacionId={item.evaluacion_id}";
+
+                        if (item.tipo_documento == "Receta" && item.documento == null)
+                            urlPdf = $"{emergenciaUrl}/evaluaciones/receta?evaluacionId={item.evaluacion_id}";
+
+                        item.documento = (item.documento == null) ? urlPdf : item.documento;
+                    }
+                    evaluacion.documentos = documentos;
+                }
+                atencion.evaluaciones = evaluaciones;
+            }
+            paciente.atenciones = atenciones;
+            return paciente;
+        }
+
+        public async Task<IEnumerable<AtencionHcDto>> ConsultarAtencionesEmergenciaAsync(string historia)
+        {
+            var atenciones = await _atencionRepository.ConsultarAtencionesEmergenciaAsync(historia);
+            return atenciones;
+        }
+
+        public async Task<IEnumerable<EvaluacionHcDto>> ConsultarEvaluacionesEmergenciaAsync(int atencion_id)
+        {
+            var evaluaciones = await _atencionRepository.ConsultarEvaluacionesEmergenciaAsync(atencion_id);
+            return evaluaciones;
+        }
+
 
         public async  Task<AtencionDto> GetAtencionByIdAsync(string token, int atencionId)
         {

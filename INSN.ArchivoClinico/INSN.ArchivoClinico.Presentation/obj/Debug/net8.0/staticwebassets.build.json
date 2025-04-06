@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "40Clu6FLCAG/YQLX2hH+9DhQ9eLLz5Iikbqs6SXEPFQ=",
+  "Hash": "IbcUB6sCC3aB5gvKmtXBOkgSdMlzwoho+xtzfktkcac=",
   "Source": "INSN.ArchivoClinico.Presentation",
   "BasePath": "_content/INSN.ArchivoClinico.Presentation",
   "Mode": "Default",
@@ -1193,25 +1193,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\orden.js"
-    },
-    {
-      "Identity": "H:\\INSNB\\archivo-clinico\\INSN.ArchivoClinico\\INSN.ArchivoClinico.Presentation\\wwwroot\\js\\triaje.js",
-      "SourceId": "INSN.ArchivoClinico.Presentation",
-      "SourceType": "Discovered",
-      "ContentRoot": "H:\\INSNB\\archivo-clinico\\INSN.ArchivoClinico\\INSN.ArchivoClinico.Presentation\\wwwroot\\",
-      "BasePath": "_content/INSN.ArchivoClinico.Presentation",
-      "RelativePath": "js/triaje.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\triaje.js"
     },
     {
       "Identity": "H:\\INSNB\\archivo-clinico\\INSN.ArchivoClinico\\INSN.ArchivoClinico.Presentation\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",

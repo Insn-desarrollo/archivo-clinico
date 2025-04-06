@@ -21,10 +21,10 @@ var dia = String(hoy.getDate()).padStart(2, '0');
 var mes = String(hoy.getMonth() + 1).padStart(2, '0'); 
 var año = hoy.getFullYear();
 
-var paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
-var paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
-var paginadoCuenta = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
-var paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
+var paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
+var paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
+var paginadoCuenta = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
+var paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
 
 
 function toggleUsuario() {
@@ -49,19 +49,19 @@ function toggleFecha() {
 function cargarVista(vista) {
     switch (vista) {
         case 'HistoriasClinicas':
-            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };           
+            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };           
             break;
         case 'AuditoriaOrdenes':
-            paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
+            paginadoOrden = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
             break;
         case 'AuditoriaCuentas':
-            paginadoCuenta = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
+            paginadoCuenta = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
             break;
         case 'AuditoriaFUA':
-            paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 8 };
+            paginadoSis = { "currentPage": 1, "totalPages": 1, "pageSize": 12 };
             break;
         default:
-            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 8 }; 
+            paginadoHistoria = { "currentPage": 1, "totalPages": 1, "pageSize": 12 }; 
             break;
     }
 
@@ -135,7 +135,8 @@ async function buscarAtenciones(event) {
         const data = await response.json();
 
         if (response.ok) {
-            updateTable(data.pacientes);
+            //updateTable(data.pacientes);
+            updateCards(data.pacientes);
             updatePagination(data.paginacion);
         } else {
             console.error("Error en la solicitud:", data);
@@ -311,149 +312,230 @@ async function limpiarAtenciones() {
         document.getElementById("loadingOverlay").classList.add("d-none");
     }
 }
-function updateTable(data) {
-    const tableBody = document.querySelector("table tbody");
-    tableBody.innerHTML = '';
+//function updateTable(data) {
+//    const tableBody = document.querySelector("table tbody");
+//    tableBody.innerHTML = '';
+
+//    const mensajeNoResultados = document.getElementById("MensajeNoResultados");
+//    mensajeNoResultados.style.display = data.length === 0 ? 'block' : 'none';
+
+//    if (data.length === 0) return;
+
+//    const fragment = document.createDocumentFragment();
+
+//    data.forEach(historia => {
+//        const row = document.createElement('tr');
+
+//        var iconColor = "#0a58ca", borderColor = "#0a58ca", icon = "3p";
+
+//        if (moduloHistoriaClinicas !== 'AuditoriaTriaje') {
+//            if (historia.auditoriaCodigoEstado === 3) {
+//                iconColor = "red";
+//                borderColor = "red";
+//                icon = "warning";
+//            } else if (historia.auditoriaCodigoEstado === 0 || historia.auditoriaCodigoEstado === 1) {
+//                iconColor = "#606060";
+//                borderColor = "#606060";
+//            }
+//        }
+
+//        const styleCampoCuenta = historia.cuenta_atencion_id ? "campo-verde" : "campo-grilla";
+//        let btnsAccion = '';
+
+//        if (moduloHistoriaClinicas == 'AuditoriaOrdenes' || moduloHistoriaClinicas == 'AuditoriaCuentas') {
+//            let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.auditoria_estado;
+//            let tituloBtn = 'Actualizar Auditoría';
+
+//            if (historia.auditoria_codigo_estado === 2) {
+//                btnFuente = 'btn-primary'
+//                textFuente = 'text-primary';
+//            } else if (historia.auditoria_codigo_estado === 3) {
+//                textFuente = 'text-danger';
+//                btnFuente = 'btn-danger'
+//                tituloBtn = 'Subsanar Observación';
+//                if (historia.auditoria_triaje_subsana_obs) {
+//                    textFuente = 'text-success';
+//                    textEstado = 'Subsanado';
+//                    btnFuente = 'btn-success';
+//                    tituloBtn = 'Actualizar Subsanación';
+//                }
+//            }
+
+//            if (historia.auditoria_codigo_estado !== 3) {
+//                btnsAccion = `
+//                <td class="text-center">
+//                    <div class="d-flex justify-content-between w-100 gap-2">
+//                        <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
+//                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
+//                            data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Auditoría">
+//                            <i class="material-icons">edit</i>
+//                        </button>
+//                    </div>
+//                </td>`;
+//            } else {
+//                btnsAccion = `
+//                <td class="text-center">
+//                    <div class="d-flex justify-content-between w-100 gap-2">
+//                        <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
+//                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
+//                            data-bs-toggle="tooltip" data-bs-placement="top" title="Subsanar Observación">
+//                            <i class="material-icons">edit_note</i>
+//                        </button>
+//                    </div>
+//                </td>`;
+//            }       
+                
+//        } else {
+//            btnsAccion = ``;
+//        }
+
+
+//        let extraColumns = '';
+//        switch (moduloHistoriaClinicas) {
+//            case "AuditoriaCuentas":
+//                extraColumns = `
+//                    <td class="small campo-grilla">${historia.fuente_financiamiento ?? ""}</td>
+//                    <td class="small campo-grilla">${historia.auditoria_estado}</td>
+//                    <td class="small campo-grilla">${historia.auditoria_usuario ?? ""}</td>`;       
+//                break;
+
+//            case "HistoriaClinicas":
+//                let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.estado_historia;
+//                let tituloBtn = 'Actualizar Historia';
+
+//                if (historia.codigo_estado_historia === 2) {
+//                    btnFuente = 'btn-primary'
+//                    textFuente = 'text-primary';
+//                } else if (historia.codigo_estado_historia === 3) {
+//                    textFuente = 'text-danger';
+//                    btnFuente = 'btn-danger'
+//                    tituloBtn = 'Subsanar Observación';
+//                }
+
+//                extraColumns = `
+//                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
+//                    <td class="small campo-grilla">${historia.correo ?? ""}</td>
+//                    <td class="small campo-grilla ${textFuente}">${textEstado}</td>`;                
+
+//                btnsAccion = `
+//                <td class="text-center">
+//                    <div class="d-flex justify-content-between w-100 gap-2">
+//                        <button type="button" class="btn ${btnFuente} w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
+//                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
+//                            data-bs-toggle="tooltip" data-bs-placement="top" title="${tituloBtn}">
+//                            <i class="material-icons">edit</i>
+//                        </button>
+//                    </div>
+//                </td>`;
+
+//                break;
+
+//            default: // Orden
+
+//                extraColumns = `
+//                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
+//                    <td class="small campo-grilla">${historia.correo}</td>`;       
+//                break;
+//        }
+
+//        row.innerHTML = `
+//            <td class="small campo-grilla">${historia.historia_clinica_id}</td>
+//            <td class="small campo-grilla">${historia.numero_historia}</td>
+//            <td class="small campo-grilla">${historia.tipos_documento} ${historia.numero_documento}</td>
+//            <td class="small campo-grilla">
+//                ${historia.apellido_paterno} ${historia.apellido_materno} ${historia.nombres}
+//            </td>
+//            <td class="small campo-grilla">${historia.fecha_nacimiento}</td>                    
+//            <td class="small campo-grilla">${historia.tipo_sexo}</td>
+//            ${extraColumns}
+//            ${btnsAccion}`;
+
+//        fragment.appendChild(row);
+//    });
+
+//    tableBody.appendChild(fragment);
+//}
+
+function updateCards(data) {
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = '';
 
     const mensajeNoResultados = document.getElementById("MensajeNoResultados");
     mensajeNoResultados.style.display = data.length === 0 ? 'block' : 'none';
-
     if (data.length === 0) return;
 
     const fragment = document.createDocumentFragment();
 
     data.forEach(historia => {
-        const row = document.createElement('tr');
+        const card = document.createElement("div");
+        card.className = "col-md-3 mb-4";
 
-        var iconColor = "#0a58ca", borderColor = "#0a58ca", icon = "3p";
+        let iconColor = "#0a58ca", icon = "folder";
+        let btnClase = "btn-primary", btnIcon = "edit", tituloBtn = "Actualizar";
+
+        let tabColorClass = "amarillo"; // default
+
+        //switch (historia.codigo_estado_historia) {
+        //    case 2:
+        //        tabColorClass = "amarillo";
+        //        break;
+        //    case 3:
+        //        tabColorClass = "rojo";
+        //        break;
+        //    case 1:
+        //        tabColorClass = "azul";
+        //        break;
+        //    default:
+        //        tabColorClass = "gris";
+        //        break;
+        //}
 
         if (moduloHistoriaClinicas !== 'AuditoriaTriaje') {
             if (historia.auditoriaCodigoEstado === 3) {
                 iconColor = "red";
-                borderColor = "red";
                 icon = "warning";
-            } else if (historia.auditoriaCodigoEstado === 0 || historia.auditoriaCodigoEstado === 1) {
-                iconColor = "#606060";
-                borderColor = "#606060";
-            }
-        }
-
-        const styleCampoCuenta = historia.cuenta_atencion_id ? "campo-verde" : "campo-grilla";
-        let btnsAccion = '';
-
-        if (moduloHistoriaClinicas == 'AuditoriaOrdenes' || moduloHistoriaClinicas == 'AuditoriaCuentas') {
-            let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.auditoria_estado;
-            let tituloBtn = 'Actualizar Auditoría';
-
-            if (historia.auditoria_codigo_estado === 2) {
-                btnFuente = 'btn-primary'
-                textFuente = 'text-primary';
-            } else if (historia.auditoria_codigo_estado === 3) {
-                textFuente = 'text-danger';
-                btnFuente = 'btn-danger'
-                tituloBtn = 'Subsanar Observación';
-                if (historia.auditoria_triaje_subsana_obs) {
-                    textFuente = 'text-success';
-                    textEstado = 'Subsanado';
-                    btnFuente = 'btn-success';
-                    tituloBtn = 'Actualizar Subsanación';
-                }
-            }
-
-            if (historia.auditoria_codigo_estado !== 3) {
-                btnsAccion = `
-                <td class="text-center">
-                    <div class="d-flex justify-content-between w-100 gap-2">
-                        <button type="button" class="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Auditoría">
-                            <i class="material-icons">edit</i>
-                        </button>
-                    </div>
-                </td>`;
+                btnClase = "btn-danger";
+                tituloBtn = "Subsanar Observación";
+                btnIcon = "edit_note";
+            } else if (historia.auditoriaCodigoEstado === 2) {
+                btnClase = "btn-primary";
             } else {
-                btnsAccion = `
-                <td class="text-center">
-                    <div class="d-flex justify-content-between w-100 gap-2">
-                        <button type="button" class="btn btn-danger w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="Subsanar Observación">
-                            <i class="material-icons">edit_note</i>
-                        </button>
-                    </div>
-                </td>`;
-            }       
-                
-        } else {
-            btnsAccion = ``;
+                iconColor = "#606060";
+            }
         }
 
+        const nombreCompleto = `${historia.apellido_paterno} ${historia.apellido_materno} ${historia.nombres}`;
+        const direccion = historia.direccion ?? '';
+        const correo = historia.correo ?? '';
+        const estadoTexto = historia.auditoria_estado || historia.estado_historia || '---';
 
-        let extraColumns = '';
-        switch (moduloHistoriaClinicas) {
-            case "AuditoriaCuentas":
-                extraColumns = `
-                    <td class="small campo-grilla">${historia.fuente_financiamiento ?? ""}</td>
-                    <td class="small campo-grilla">${historia.auditoria_estado}</td>
-                    <td class="small campo-grilla">${historia.auditoria_usuario ?? ""}</td>`;       
-                break;
+        card.innerHTML = `
+    <div class="folder-card h-100">
+    <div class="folder-tab ${tabColorClass}">Historia N° ${historia.numero_historia}</div>
+        <div class="folder-content">
+            <div class="d-flex align-items-start gap-3">               
+                <button class="icon-button text-warning" onclick="abrirModalDetalle(${historia.numero_historia})" data-bs-toggle="tooltip" title="Ver Detalle">
+                     <i class="material-icons folder-icon">search</i>
+                </button>
+                <div>
+                    <p class="mb-1 folder-label">${historia.apellido_paterno} ${historia.apellido_materno}, ${historia.nombres}</p>
+                    <p class="mb-1"><strong>Documento:</strong> ${historia.numero_documento} 
+                    <br> <strong>  Fecha Nacimiento:</strong> ${historia.fecha_nacimiento}                    
+                    <br> <strong>Estado:</strong> <span class="text-${btnClase === 'btn-danger' ? 'danger' : 'primary'}">${estadoTexto}</span>
+                    </p>                 
+                </div>
+            </div>
+        </div>
+        
+    </div>
+`;
 
-            case "HistoriaClinicas":
-                let textFuente = '', btnFuente = 'btn-secondary', textEstado = historia.estado_historia;
-                let tituloBtn = 'Actualizar Historia';
-
-                if (historia.codigo_estado_historia === 2) {
-                    btnFuente = 'btn-primary'
-                    textFuente = 'text-primary';
-                } else if (historia.codigo_estado_historia === 3) {
-                    textFuente = 'text-danger';
-                    btnFuente = 'btn-danger'
-                    tituloBtn = 'Subsanar Observación';
-                }
-
-                extraColumns = `
-                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
-                    <td class="small campo-grilla">${historia.correo ?? ""}</td>
-                    <td class="small campo-grilla ${textFuente}">${textEstado}</td>`;                
-
-                btnsAccion = `
-                <td class="text-center">
-                    <div class="d-flex justify-content-between w-100 gap-2">
-                        <button type="button" class="btn ${btnFuente} w-100 me-2 d-flex align-items-center justify-content-center gap-2 responsive-btn"
-                            onclick="abrirModalDetalle('${historia.atencion_id_eess}', '${moduloHistoriaClinicas}')"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="${tituloBtn}">
-                            <i class="material-icons">edit</i>
-                        </button>
-                    </div>
-                </td>`;
-
-                break;
-
-            default: // Orden
-
-                extraColumns = `
-                    <td class="small campo-grilla">${historia.direccion ?? ""}</td>
-                    <td class="small campo-grilla">${historia.correo}</td>`;       
-                break;
-        }
-
-        row.innerHTML = `
-            <td class="small campo-grilla">${historia.historia_clinica_id}</td>
-            <td class="small campo-grilla">${historia.numero_historia}</td>
-            <td class="small campo-grilla">${historia.tipos_documento} ${historia.numero_documento}</td>
-            <td class="small campo-grilla">
-                ${historia.apellido_paterno} ${historia.apellido_materno} ${historia.nombres}
-            </td>
-            <td class="small campo-grilla">${historia.fecha_nacimiento}</td>                    
-            <td class="small campo-grilla">${historia.tipo_sexo}</td>
-            ${extraColumns}
-            ${btnsAccion}`;
-
-        fragment.appendChild(row);
+        fragment.appendChild(card);
     });
 
-    tableBody.appendChild(fragment);
+    container.appendChild(fragment);
 }
+
 
 
 function updatePagination(paginacion) {
@@ -467,7 +549,7 @@ function updatePagination(paginacion) {
     totalRecords = paginacion.totalRecords;
     paginationElement.style.display = "block";
     document.getElementById("infoPaginacion").textContent = `Página ${currentPage} de ${totalPages}`;
-    document.getElementById("totalRegistros").textContent = `Total de registros: ${totalRecords}`;
+    document.getElementById("totalRegistros").textContent = `Total de historias: ${totalRecords}`;
     document.getElementById("paginaAnterior").classList.toggle("disabled", currentPage === 1);
     document.getElementById("PaginaSiguiente").classList.toggle("disabled", currentPage === totalPages);
 }
@@ -658,22 +740,23 @@ async function btnConfirmarFUA() {
 }
 
 function abrirModalDetalle(idAtencionEESS) {
-    if (moduloHistoriaClinicas == "AuditoriaTriaje") {
-        var url = this.despliegue + '/Atencion/Triaje?id=' + idAtencionEESS;
+    console.log(idAtencionEESS);
+    if (moduloHistoriaClinicas == "HistoriaClinicas") {
+        var url = this.despliegue + '/Atencion/Atenciones?id=' + idAtencionEESS;
 
         document.getElementById("loadingEvaluacion").classList.remove("d-none");
-        $('#iframeDetalleTriaje').on('load', function () {
+        $('#iframeDetalleAtenciones').on('load', function () {
             document.getElementById("loadingEvaluacion").classList.add("d-none");
         });
 
-        $('#iframeDetalleTriaje').attr('src', url);
-        $('#modalDetalleTriaje').modal('show');        
+        $('#iframeDetalleAtenciones').attr('src', url);
+        $('#modalDetalleAtenciones').modal('show');        
 
-        $('#modalDetalleTriaje').on('hidden.bs.modal', async function () {
+        $('#modalDetalleAtenciones').on('hidden.bs.modal', async function () {
             await buscarAtenciones();
         });        
     }
-    else if (moduloHistoriaClinicas == "AuditoriaOrdenes") {
+    else if (moduloHistoriaClinicas == "HistoriaClinicas") {
         var url = this.despliegue + '/Atencion/Orden?id=' + idAtencionEESS;
 
         document.getElementById("loadingEvaluacion").classList.remove("d-none");

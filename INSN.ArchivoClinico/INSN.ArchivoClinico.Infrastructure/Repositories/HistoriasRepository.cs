@@ -19,18 +19,20 @@ using Microsoft.Data.SqlClient;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using NpgsqlTypes;
 using Newtonsoft.Json.Linq;
+using Dapper;
+using INSN.ArchivoClinico.Infrastructure.Services;
 //using INSN.ArchivoClinico.Application.DTOs;
 
 namespace INSN.ArchivoClinico.Infrastructure.Repositories
 {
     public class HistoriasRepository : IHistoriasRepository
     {
-        private readonly AppDbContext _context;
         private readonly string _connectionString;
-        public HistoriasRepository(AppDbContext context, IConfiguration configuration)
+        private readonly IPgDatabaseService _pgDatabaseService;
+        public HistoriasRepository(IConfiguration configuration, IPgDatabaseService pgDatabaseService)
         {
-            _context = context;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _pgDatabaseService = pgDatabaseService;
         }
 
         public async Task<List<ContadorPendientes>> ObtenerContadoresBandejaAsync()
@@ -130,10 +132,12 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
 
         public async Task<IEnumerable<HistoriaClinicaDto>> ConsultarHistoriasAsync(HistoriaFiltro filtro)
         {
-            using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
+            try
+            {
+                using var connection = new NpgsqlConnection(_connectionString);
+                await connection.OpenAsync();
 
-            string sql = @"SELECT * FROM public.fn_historias_clinicas(
+                string sql = @"SELECT * FROM public.fn_historias_clinicas(
                      @p_historia_clinica,
                      @p_documento_identidad,
                      @p_nombre,
@@ -142,20 +146,315 @@ namespace INSN.ArchivoClinico.Infrastructure.Repositories
                      @p_page_size
                    );";
 
-            var parametros = new
+                var parametros = new
+                {
+                    p_historia_clinica = filtro.HistoriaClinica ?? string.Empty,
+                    p_documento_identidad = filtro.DocumentoIdentidad ?? string.Empty,
+                    p_nombre = filtro.Nombre ?? string.Empty,
+                    p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,
+                    p_page_number = filtro.Page,
+                    p_page_size = filtro.PageSize
+                };
+
+                var resultados = await connection.QueryAsync<HistoriaClinicaDto>(sql, parametros);
+
+                return resultados;
+            }
+            catch (Exception ex)
             {
-                p_historia_clinica = filtro.HistoriaClinica ?? string.Empty,
-                p_documento_identidad = filtro.DocumentoIdentidad ?? string.Empty,
-                p_nombre = filtro.Nombre ?? string.Empty,                
-                p_codigo_estado = filtro.CodigoEstado ?? (object)DBNull.Value,                
-                p_page_number = filtro.Page,
-                p_page_size = filtro.PageSize
-            };
 
-            var resultados = await connection.QueryAsync<HistoriaClinicaDto>(sql, parametros);
+                throw ex;
+            }          
+        }       
 
-            return resultados;
-        }     
+        public async Task<HistoriaClinicaConsultaDto> ConsultarPacienteAsync(string historia)
+        {
+
+            var query = @"SELECT A.paciente_id as historia_clinica_id,
+		            A.paciente_id,
+		            A.historia_clinica as numero_historia,
+		            1 as codigo_tipo_documento,
+		            A.tipo_documento AS tipos_documento,
+                    A.numero_documento numero_documento,
+		            A.apellido_paterno,
+                    A.apellido_materno,
+                    A.nombres,
+		            COALESCE(TO_CHAR(A.fecha_nacimiento, 'DD/MM/YYYY')::character varying, 'Sin fecha') AS fecha_nacimiento,
+		            1 as codigo_tipo_sexo,
+		            A.sexo AS tipo_sexo,
+		            COALESCE(A.direccion, '') as direccion,
+		            '-' as correo,
+		            1 as codigo_estado_historia,       
+                    'Activa' AS estado_historia
+                from public.emr_paciente A
+                where A.historia_clinica = @historia;
+        ";
+
+            var parameters = new { historia = historia };
+
+            var paciente = await _pgDatabaseService.GetConnection().QueryFirstOrDefaultAsync<HistoriaClinicaConsultaDto>(query, parameters);
+
+            return paciente;
+        }
+
+        public async Task<IEnumerable<AtencionHcDto>> ConsultarAtencionesEmergenciaAsync(string historia)
+        {
+            var query = @"select 
+	                   a.atencion_id,	   
+	                   c.historia_clinica,
+	                   c.numero_documento, 
+	                   COALESCE(c.apellido_paterno, '') || ' ' || COALESCE(c.apellido_materno, '') || ' ' || COALESCE(c.nombres, '') AS nombre_paciente,      
+	                   d.nombre as servicio,	   
+	                   TO_CHAR(a.created_at, 'DD/MM/YYYY HH24:MI:SS') AS fecha_hora_atencion
+                from public.hce_atencion a
+                inner join public.emr_triaje b on a.triaje_id = b.triaje_id
+                inner join public.emr_paciente c on b.paciente_id = c.paciente_id 
+                inner join public.emr_destino_atencion d on d.destino_atencion_id = a.destino_atencion_id
+                where c.historia_clinica = @historia
+                order by a.atencion_id asc;
+        ";
+
+            var parameters = new { historia = historia };
+
+            var atencion = await _pgDatabaseService.GetConnection().QueryAsync<AtencionHcDto>(query, parameters);
+
+            return atencion;
+        }
+
+        public async Task<IEnumerable<EvaluacionHcDto>> ConsultarEvaluacionesEmergenciaAsync(int atencion_id)
+        {
+            var query = @"select 
+            ev.evaluacion_id, 
+            TO_CHAR(ev.created_at, 'DD/MM/YYYY HH24:MI:SS') AS fecha_hora_evaluacion
+            from public.emr_evaluacion ev
+            where ev.atencion_id = @atencion_id
+            order by ev.evaluacion_id asc;";
+
+            var parameters = new { atencion_id = atencion_id };
+
+            var evaluacion = await _pgDatabaseService.GetConnection().QueryAsync<EvaluacionHcDto>(query, parameters);
+
+            return evaluacion;
+        }
+
+        public async Task<IEnumerable<DocumentosEvaluacionHC>> ConsultaDocumentoAtencion(int atencion_id)
+        {
+            try
+            {
+                var query = @"
+            WITH datos AS (                
+               SELECT 
+                    t.triaje_id,
+                    a.atencion_id,    
+                    NULL AS evaluacion_id,
+                    t.paciente_hc AS historia_clinica, 
+                    COALESCE(t.pa_nombres, '') || ' ' || 
+                    COALESCE(t.pa_apellido_paterno, '') || ' ' || 
+                    COALESCE(t.pa_apellido_materno, '') AS paciente,
+                    'Formato Fua' AS tipo_documento,
+                    a.url_documento_fua_firma AS documento,
+                    CASE 
+                        WHEN a.estado = 'R' AND a.url_documento_fua_firma IS NULL THEN 'En espera de alta'
+                        WHEN a.estado = 'A' AND a.url_documento_fua_firma IS NULL THEN 'Para firma'
+                        WHEN a.estado = 'A' AND a.url_documento_fua_firma IS NOT NULL THEN 'Documento firmado'
+                        ELSE 'Pendiente'
+                    END AS estado,
+                    TO_CHAR(t.fusu, 'DD/MM/YYYY') AS fecha_registro,
+                    TO_CHAR(a.fecha_firma_documento_fua, 'DD/MM/YYYY') AS fecha_firma,
+                    a.profesional_id
+                FROM public.emr_triaje t 
+                INNER JOIN public.emr_paciente p ON t.paciente_id = p.paciente_id
+                INNER JOIN public.hce_atencion a ON a.triaje_id = t.triaje_id
+                WHERE a.cuenta_atencion_id IS NOT NULL
+                AND a.fuente_financimiento_descripcion = 'SIS'
+                AND a.atencion_id = @atencion_id
+                AND a.fua_estado in ('P', 'F')
+                
+                UNION ALL	 
+
+                -- Quinta consulta (Papeleta Egreso)
+                SELECT 
+                    t.triaje_id,
+                    a.atencion_id,    
+                    NULL AS evaluacion_id,
+                    t.paciente_hc AS historia_clinica, 
+                    COALESCE(t.pa_nombres, '') || ' ' || 
+                    COALESCE(t.pa_apellido_paterno, '') || ' ' || 
+                    COALESCE(t.pa_apellido_materno, '') AS paciente,
+                    'Papeleta Egreso' AS tipo_documento,
+                    e.url_documento_egreso_firma AS documento,
+                    CASE 
+                        WHEN a.estado = 'R' AND e.url_documento_egreso_firma IS NULL THEN 'En espera de alta'
+                        WHEN a.estado = 'A' AND e.url_documento_egreso_firma IS NULL AND COALESCE(e.flag_documento_firmado, false) IS false THEN 'Para firma'
+                        WHEN a.estado = 'A' AND e.url_documento_egreso_firma IS NOT NULL AND COALESCE(e.flag_documento_firmado, false) IS true THEN 'Documento firmado'
+                        ELSE 'Pendiente'
+                    END AS estado,
+                    TO_CHAR(t.fusu, 'DD/MM/YYYY') AS fecha_registro,
+                    TO_CHAR(e.fecha_firma_documento_egreso, 'DD/MM/YYYY') AS fecha_firma,
+                    a.profesional_id
+                FROM public.emr_triaje t 
+                INNER JOIN public.emr_paciente p ON t.paciente_id = p.paciente_id
+                INNER JOIN public.hce_atencion a ON a.triaje_id = t.triaje_id
+                INNER JOIN public.emr_egreso e ON e.atencion_id = a.atencion_id
+                WHERE a.cuenta_atencion_id IS NOT NULL
+                AND a.atencion_id = @atencion_id
+            )
+            SELECT distinct * FROM datos;";
+
+                var parameters = new { atencion_id = atencion_id };
+                var documentos = await _pgDatabaseService.GetConnection().QueryAsync<DocumentosEvaluacionHC>(query, parameters);
+
+                return documentos;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
+
+
+        public async Task<IEnumerable<DocumentosEvaluacionHC>> ConsultaDocumentoEvaluacion(int evaluacion_id)
+        {
+            var query = @"
+            WITH datos AS (
+                -- Primera consulta (Historia Clínica)
+                SELECT 
+                    t.triaje_id,
+                    a.atencion_id,    
+                    e.evaluacion_id,
+                    t.paciente_hc AS historia_clinica, 
+                    COALESCE(t.pa_nombres, '') || ' ' || 
+                    COALESCE(t.pa_apellido_paterno, '') || ' ' || 
+                    COALESCE(t.pa_apellido_materno, '') AS paciente,
+                    'Historia Clinica' AS tipo_documento,
+                    e.url_documento_evaluacion_firma AS documento,
+	                CASE
+                        WHEN (SELECT COUNT(*) 
+                            FROM public.emr_evaluacion_examen_auxiliar em 
+                            WHERE em.evaluacion_id = e.evaluacion_id 
+                            AND em.auditoria_codigo_estado IN (1,3)
+                            ) > 0 AND (SELECT COUNT(*) 
+                                FROM public.emr_evaluacion_medicamento em 
+                                WHERE em.evaluacion_id = e.evaluacion_id 
+                                AND em.auditoria_codigo_estado IN (1,3)
+                            ) > 0 AND e.url_documento_evaluacion_firma IS NULL THEN 'En espera de orden y receta'
+                        WHEN (SELECT COUNT(*) 
+                            FROM public.emr_evaluacion_examen_auxiliar em 
+                            WHERE em.evaluacion_id = e.evaluacion_id 
+                            AND em.auditoria_codigo_estado IN (1,3)
+                            ) = 0 AND (SELECT COUNT(*) 
+                                FROM public.emr_evaluacion_medicamento em 
+                                WHERE em.evaluacion_id = e.evaluacion_id 
+                                AND em.auditoria_codigo_estado IN (1,3)
+                            ) = 0 AND e.url_documento_evaluacion_firma IS NULL THEN 'Para firma'
+                        WHEN e.url_documento_evaluacion_firma IS NOT NULL THEN 'Documento firmado'
+                        ELSE 'Pendiente'
+                    END AS estado,
+                    TO_CHAR(t.fusu, 'DD/MM/YYYY') AS fecha_registro,
+                    TO_CHAR(e.fecha_firma_documento_evaluacion, 'DD/MM/YYYY') AS fecha_firma,
+                    a.profesional_id
+                FROM public.emr_triaje t 
+                INNER JOIN public.emr_paciente p ON t.paciente_id = p.paciente_id
+                INNER JOIN public.hce_atencion a ON a.triaje_id = t.triaje_id
+                INNER JOIN public.emr_evaluacion e ON e.atencion_id = a.atencion_id
+                WHERE a.cuenta_atencion_id IS NOT NULL
+                AND (@evaluacion_id IS NULL OR e.evaluacion_id = @evaluacion_id)
+
+                UNION ALL
+
+                -- Segunda consulta (Ordenes)
+                SELECT 
+                    t.triaje_id,
+                    a.atencion_id,    
+                    e.evaluacion_id,
+                    t.paciente_hc AS historia_clinica, 
+                    COALESCE(t.pa_nombres, '') || ' ' || 
+                    COALESCE(t.pa_apellido_paterno, '') || ' ' || 
+                    COALESCE(t.pa_apellido_materno, '') AS paciente,
+                    'Orden' AS tipo_documento,
+                    e.url_documento_orden_firma AS documento,
+                    CASE 
+		                WHEN (SELECT COUNT(*) 
+                            FROM public.emr_evaluacion_examen_auxiliar em 
+                            WHERE em.evaluacion_id = e.evaluacion_id 
+                            AND em.auditoria_codigo_estado IN (1,3)
+                        ) > 0 THEN 'En auditoria'
+                        WHEN (SELECT COUNT(*) 
+				                FROM public.emr_evaluacion_examen_auxiliar em 
+				                WHERE em.evaluacion_id = e.evaluacion_id 
+				                AND em.auditoria_codigo_estado IN (1,3)
+        	                ) = 0 AND e.url_documento_orden_firma IS NULL THEN 'Para firma'
+                        ELSE 'Documento firmado'
+                    END AS estado,
+                    TO_CHAR(e.created_at, 'DD/MM/YYYY') AS fecha_registro,
+                    TO_CHAR(e.fecha_firma_documento_orden, 'DD/MM/YYYY') AS fecha_firma,
+                    a.profesional_id
+                FROM public.emr_triaje t 
+                INNER JOIN public.emr_paciente p ON t.paciente_id = p.paciente_id
+                INNER JOIN public.hce_atencion a ON a.triaje_id = t.triaje_id
+                INNER JOIN public.emr_evaluacion e ON e.atencion_id = a.atencion_id
+                WHERE a.cuenta_atencion_id IS NOT NULL
+                AND (@evaluacion_id IS NULL OR e.evaluacion_id = @evaluacion_id)
+	            AND EXISTS (
+                    SELECT 1 FROM public.emr_evaluacion_examen_auxiliar ea
+                    WHERE ea.evaluacion_id IN (
+                        SELECT evaluacion_id FROM public.emr_evaluacion WHERE atencion_id = a.atencion_id
+                    )    
+                )
+
+                UNION ALL
+
+                -- Tercera consulta (recetas)
+                SELECT 
+                    t.triaje_id,
+                    a.atencion_id,    
+                    e.evaluacion_id,
+                    t.paciente_hc AS historia_clinica, 
+                    COALESCE(t.pa_nombres, '') || ' ' || 
+                    COALESCE(t.pa_apellido_paterno, '') || ' ' || 
+                    COALESCE(t.pa_apellido_materno, '') AS paciente,
+                    'Receta' AS tipo_documento,
+                    e.url_documento_receta_firma AS documento,
+                    CASE 
+		                    WHEN (SELECT COUNT(*) 
+                                FROM public.emr_evaluacion_medicamento em 
+                                WHERE em.evaluacion_id = e.evaluacion_id 
+                                AND em.auditoria_codigo_estado IN (1,3)
+                            ) > 0 THEN 'En auditoria'
+                            WHEN (SELECT COUNT(*) 
+				                    FROM public.emr_evaluacion_medicamento em 
+				                    WHERE em.evaluacion_id = e.evaluacion_id 
+				                    AND em.auditoria_codigo_estado IN (1,3)
+        	                    ) = 0 AND e.url_documento_receta_firma IS NULL THEN 'Para firma'
+                            ELSE 'Documento firmado'
+                     END AS estado,
+                    TO_CHAR(e.created_at, 'DD/MM/YYYY') AS fecha_registro,
+                    TO_CHAR(e.fecha_firma_documento_receta, 'DD/MM/YYYY') AS fecha_firma,
+                    a.profesional_id
+                FROM public.emr_triaje t 
+                INNER JOIN public.emr_paciente p ON t.paciente_id = p.paciente_id
+                INNER JOIN public.hce_atencion a ON a.triaje_id = t.triaje_id
+                INNER JOIN public.emr_evaluacion e ON e.atencion_id = a.atencion_id
+                WHERE a.cuenta_atencion_id IS NOT NULL
+                AND (@evaluacion_id IS NULL OR e.evaluacion_id = @evaluacion_id)
+	            AND EXISTS (
+                    SELECT 1 FROM public.emr_evaluacion_medicamento ea
+                    WHERE ea.evaluacion_id IN (
+                        SELECT evaluacion_id FROM public.emr_evaluacion WHERE atencion_id = a.atencion_id
+                    )    
+                )
+            )
+            SELECT distinct * FROM datos;";
+
+            var parameters = new { evaluacion_id = evaluacion_id };
+            var documentos = await _pgDatabaseService.GetConnection().QueryAsync<DocumentosEvaluacionHC>(query, parameters);
+
+            return documentos;
+        }
+
+
 
         public async Task<TriajeResponseDto> ActualizarTriajeAsync(ActualizarTriajeRequest request)
         {

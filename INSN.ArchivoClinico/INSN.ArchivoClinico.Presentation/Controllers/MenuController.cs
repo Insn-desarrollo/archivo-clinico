@@ -90,12 +90,12 @@ namespace INSN.ArchivoClinico.Controllers
                 new UsuarioAdmin { Usuario = "Por asignar", Nombre = "Por asignar" } 
             };
 
-            var lUsuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
-            var lUsuarioFilterDto = lUsuariosDto.Where(x => x.Cargo.Equals(1));
-            foreach (var item in lUsuarioFilterDto)
-            {
-                listaUsuarios.Add(new UsuarioAdmin { Usuario = item.Usuario, Nombre = item.Usuario });
-            }
+            //var lUsuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
+            //var lUsuarioFilterDto = lUsuariosDto.Where(x => x.Cargo.Equals(1));
+            //foreach (var item in lUsuarioFilterDto)
+            //{
+            //    listaUsuarios.Add(new UsuarioAdmin { Usuario = item.Usuario, Nombre = item.Usuario });
+            //}
 
             switch (vista)
             {
@@ -129,21 +129,23 @@ namespace INSN.ArchivoClinico.Controllers
                 ViewBag.NombreUsuario = HttpContext.Session.GetString("Usuario");
                 var usuario = GetUsuario();
 
-                var usuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
+                //var usuariosDto = await _atencionAppService.ObtenerListaUsuariosAsync();
                 //var contadores = await _atencionAppService.ObtenerContadoresBandejaAsync();
                 //var contador = contadores.FirstOrDefault();
 
-                var usuarioCargo = usuariosDto.Where(x => x.Usuario.Equals(usuario));
+                //var usuarioCargo = usuariosDto.Where(x => x.Usuario.Equals(usuario));
 
                 var menus = new List<dynamic>();
-                if (usuarioCargo.Any())
-                {
-                    menus.Add(new { Flag = "hisClinicas", Icon = "assignment", Text = "Historias Clínicas", Vista = "HistoriasClinicas", Badge = 2 });
-                    menus.Add(new { Flag = "regPrestamos", Icon = "account_balance", Text = "Registro de préstamos", Vista = "RegistroPrestamos", Badge = 1 });
-                }
+                menus.Add(new { Flag = "hisClinicas", Icon = "assignment", Text = "Historias Clínicas", Vista = "HistoriasClinicas", Badge = 2 });
+                menus.Add(new { Flag = "regPrestamos", Icon = "account_balance", Text = "Registro de préstamos", Vista = "RegistroPrestamos", Badge = 1 });
+                //if (usuarioCargo.Any())
+                //{
+                //    menus.Add(new { Flag = "hisClinicas", Icon = "assignment", Text = "Historias Clínicas", Vista = "HistoriasClinicas", Badge = 2 });
+                //    menus.Add(new { Flag = "regPrestamos", Icon = "account_balance", Text = "Registro de préstamos", Vista = "RegistroPrestamos", Badge = 1 });
+                //}
 
                 // Lista tipada para mayor claridad y seguridad
-                
+
                 //if (usuarioCargo.Any(x => x.Cargo == 2))
                 //{
                 //    menus.Add(new { Flag = "admin", Icon = "admin_panel_settings", Text = "Administrar Atenciones", Vista = "AuditoriaAdmin", Badge = contador?.cantidad_por_asignar });
@@ -168,8 +170,7 @@ namespace INSN.ArchivoClinico.Controllers
         {
             return View();
         }
-
-         
+                 
         public async Task<IActionResult> HistoriasClinicas([FromQuery] HistoriaFiltro filtro)
         {
             try
